@@ -1,0 +1,2 @@
+fan.c:15:6:FAN_init	16	static
+fan.c:23:6:FAN_set	16	static

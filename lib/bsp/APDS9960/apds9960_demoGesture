@@ -1,0 +1,115 @@
+/**
+  ******************************************************************************
+  * @file    apds9960_demoGesture
+  * @author  Cécile Lebrun
+  * @version V1.0
+  * @date    26-Janvier-2017
+  * @brief   Fichier exemple de l'utilisation du capteur APDS9960 en mode "Gesture". Il permet de détecter
+  *			 certains gestes de l'utilisateur (balayage haut/bas, bas/haut, droite/gauche, gauche/droite,
+  *			 près/loin, loin/près), puis d'afficher le résultat du geste trouvé sur la sortie UART.
+  *  		 
+  ******************************************************************************
+*/
+#include "stm32f1xx_hal.h"
+#include "stm32f1xx_nucleo.h"
+#include "stm32f1_uart.h"
+#include "stm32f1_sys.h"
+#include "macro_types.h"
+#include "stm32f1_gpio.h"
+#include "APDS9960/apds9960.h"
+
+//Variable globale permettant de savoir si l'on a détecté une interruption.
+int irq_active = 0;
+
+/**
+ * @brief	Fonction permettant de lire le geste effectué par l'utilisateur après que ce geste ait déclenché
+ *    		une interruption.
+ *			Ici, le choix a été fait de lire le geste puis d'afficher un texte correspondant au geste détecté
+ *			sur l'UART.
+ *			Il est tout a fait possible d'envisager d'autres actions associées à chacun des gestes en modifiant
+ *			les instructions effectuées dans les différents cas du switch.    
+ */
+void handleGesture() {
+    if ( isGestureAvailable() ) {
+    switch ( readGesture() ) {
+      case DIR_UP:
+        printf("\nUP\n");
+        break;
+      case DIR_DOWN:
+    	printf("\nDOWN\n");
+        break;
+      case DIR_LEFT:
+    	printf("\nLEFT\n");
+        break;
+      case DIR_RIGHT:
+    	printf("\nRIGHT\n");
+        break;
+      case DIR_NEAR:
+    	printf("\nNEAR\n");
+        break;
+      case DIR_FAR:
+    	printf("\nFAR\n");
+        break;
+      default:
+    	printf("\nNONE\n");
+    }
+	//On réactive les IT
+    irq_active = 0;
+    HAL_NVIC_EnableIRQ((IRQn_Type)(EXTI9_5_IRQn));
+  }
+}
+
+
+int main(void)
+{
+	HAL_Init();			//Initialisation de la couche logicielle HAL (Hardware Abstraction Layer)
+	BSP_GPIO_Enable();	//Activation des périphériques GPIO
+	SYS_ClockConfig();		//Configuration des horloges.
+
+	//Initialisation de l'UART1 à la vitesse de 115200 bauds/secondes (92kbits/s) PB6 : Tx  | PB7 : Rx.
+	UART_init(UART1_ID,115200);
+
+	//"Indique que les printf sortent vers le périphérique UART1."
+	SYS_set_std_usart(UART1_ID, UART1_ID, UART1_ID);
+
+	//Initialisation du port de la pin d'interruption du capteur. Ici, on utilise PC9, mais cela peut-être
+	//n'importe quelle broche pouvant accueillir une IT.
+	BSP_GPIO_PinCfg(GPIOC, GPIO_PIN_9,GPIO_MODE_IT_FALLING,GPIO_NOPULL,GPIO_SPEED_FREQ_HIGH);
+
+	//Initialisation du capteur
+	init();
+	//Activation du capteur en mode "Gesture"
+	enableGestureSensor(TRUE);
+
+	//Activation des IT.
+	HAL_NVIC_EnableIRQ((IRQn_Type)(EXTI9_5_IRQn));
+
+
+	while(1)
+	{
+		//Si une interruption a eu lieu, c'est-à-dire si un mouvement a été détecté, on le traite.
+		if (irq_active == 1) {
+			handleGesture();
+		}
+	}
+}
+
+
+/**
+ * @brief	Routine d'interruption appelée "automatiquement" à chaque front descendant sur la broche PC9,
+ *			c'est-à-dire lorsqu'un mouvement est détecté au dessus du capteur.
+ */
+void EXTI9_5_IRQHandler(void)
+{
+	if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_9) != RESET)
+	{
+		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_9);		//On acquitte l’it
+		HAL_NVIC_DisableIRQ((IRQn_Type)(EXTI9_5_IRQn)); //On désactive les IT pour avoir le temps de traiter le mouvement détecté.
+		irq_active = 1; //On signale qu'une IT a été déclenchée.
+	}
+}
+
+
+
+
+

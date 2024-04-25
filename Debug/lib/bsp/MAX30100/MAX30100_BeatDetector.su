@@ -1,0 +1,5 @@
+MAX30100_BeatDetector.c:41:8:BEATDETECTOR_addSample	16	static
+MAX30100_BeatDetector.c:46:7:BEATDETECTOR_getRate	8	static
+MAX30100_BeatDetector.c:55:7:BEATDETECTOR_getCurrentThreshold	4	static
+MAX30100_BeatDetector.c:60:8:checkForBeat	48	static
+MAX30100_BeatDetector.c:123:6:decreaseThreshold	24	static
