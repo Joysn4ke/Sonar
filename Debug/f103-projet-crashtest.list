@@ -2525,7 +2525,7 @@ static void state_machine(void)
     //uint16_t distance = 0;
 
 
-    bool_e button_event = BUTTON_state_machine();    //à chaque passage ici, on scrute un éventuel évènement sur le bouton
+    bool_e button_event = BUTTON_state_machine();    //ï¿½ chaque passage ici, on scrute un ï¿½ventuel ï¿½vï¿½nement sur le bouton
  80017e2:	f7ff fd39 	bl	8001258 <BUTTON_state_machine>
  80017e6:	63b8      	str	r0, [r7, #56]	; 0x38
 
@@ -2783,7 +2783,7 @@ static void state_machine(void)
  80019ca:	4a11      	ldr	r2, [pc, #68]	; (8001a10 <state_machine+0x250>)
  80019cc:	f002 fec6 	bl	800475c <ILI9341_Puts>
             	}
-            	last_display_time = current_time; // Mettre à jour le temps du dernier affichage
+            	last_display_time = current_time; // Mettre ï¿½ jour le temps du dernier affichage
  80019d0:	4a12      	ldr	r2, [pc, #72]	; (8001a1c <state_machine+0x25c>)
  80019d2:	6b7b      	ldr	r3, [r7, #52]	; 0x34
  80019d4:	6013      	str	r3, [r2, #0]
@@ -3062,7 +3062,7 @@ void isClicked(void) {
 	uint16_t x, y;
 
 	//code temporaire
-	DrawQuadrilateral(static_quadrilateral);		// Dessiner le quadrilatère
+	DrawQuadrilateral(static_quadrilateral);		// Dessiner le quadrilatï¿½re
  8001bc6:	4b24      	ldr	r3, [pc, #144]	; (8001c58 <isClicked+0x98>)
  8001bc8:	e893 0003 	ldmia.w	r3, {r0, r1}
  8001bcc:	f7ff fcaf 	bl	800152e <DrawQuadrilateral>

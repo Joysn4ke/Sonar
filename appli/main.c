@@ -25,13 +25,13 @@
 //			State Machine
 //##################################
 typedef enum
-    {
-        INIT,
-        MENU_CHOICE,
-        SCANNING_ENVIRONNEMENT,
-		PAUSE,
-        SCREEN_DISPLAY,
-    }state_e;
+{
+	INIT,
+	MENU_CHOICE,
+	SCANNING_ENVIRONNEMENT,
+	PAUSE,
+	SCREEN_DISPLAY,
+}state_e;
 
 static state_e state = INIT;
 static state_e previous_state = INIT;
@@ -130,7 +130,7 @@ static void state_machine(void)
     //uint16_t distance = 0;
 
 
-    bool_e button_event = BUTTON_state_machine();    //à chaque passage ici, on scrute un éventuel évènement sur le bouton
+    bool_e button_event = BUTTON_state_machine();    //ï¿½ chaque passage ici, on scrute un ï¿½ventuel ï¿½vï¿½nement sur le bouton
 
 
     switch(state)
@@ -176,7 +176,7 @@ static void state_machine(void)
 					ILI9341_DrawFilledRectangle(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10) + string_length("Scanne environnement", &Font_7x10), closeButton.centerY + TEXT_HEIGHT_7_10, ILI9341_COLOR_WHITE);
 					ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, "Scanne environnement", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
             	}
-            	last_display_time = current_time; // Mettre à jour le temps du dernier affichage
+            	last_display_time = current_time; // Mettre ï¿½ jour le temps du dernier affichage
             }
 
             HCSR04_state_machine();
@@ -239,7 +239,7 @@ void isClicked(void) {
 	uint16_t x, y;
 
 	//code temporaire
-	DrawQuadrilateral(static_quadrilateral);		// Dessiner le quadrilatère
+	DrawQuadrilateral(static_quadrilateral);		// Dessiner le quadrilatï¿½re
 	//code temporaire
 
 	if(XPT2046_getMedianCoordinates(&x, &y, XPT2046_COORDINATE_SCREEN_RELATIVE))
