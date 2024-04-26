@@ -44,7 +44,7 @@ static void state_machine(void);
 //##################################
 //##################################
 
-//test
+//te
 
 //##################################
 //	          Write Led
@@ -181,11 +181,13 @@ static void state_machine(void)
 
             HCSR04_state_machine();
             //SERVO_rotation();
-
+            uint8_t id_hcsr04;
+            uint16_t *distance_capteur;
+			//uint16_t * DISTANCE_GLOBAL;
             //printf("print scanning environnment %u\n", DISTANCE_GLOBAL);
 
 
-            if (DISTANCE_GLOBAL > 0)
+            if (HCSR04_get_value(id_hcsr04,  &distance_capteur) > 0)
             //if (distance > 0)
             {
                 state = SCREEN_DISPLAY;
@@ -217,8 +219,10 @@ static void state_machine(void)
             {
             	//printf("print screen display %u\n", DISTANCE_GLOBAL);
 
+
+
             	char buffer[50];
-				sprintf(buffer, "%d", DISTANCE_GLOBAL);
+				sprintf(buffer, "%d", HCSR04_get_value(id_hcsr04, &distance_capteur ));
 
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, "Distance : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Distance : ", &Font_7x10), closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, &buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);

@@ -22,12 +22,12 @@
 #endif
 
 
-//Include pour utiliser les affichages sur l'écran TFT ILI
+//Include pour utiliser les affichages sur l'ï¿½cran TFT ILI
 #include "ecran.h"
 
 
-//En cas d'absence de mesure, certains HCSR04 présentent un écho de l'ordre de 130ms.
-//Si La période de mesure est inférieure, elle ne sera respectée que si le capteur à présenté un écho moins long.
+//En cas d'absence de mesure, certains HCSR04 prï¿½sentent un ï¿½cho de l'ordre de 130ms.
+//Si La pï¿½riode de mesure est infï¿½rieure, elle ne sera respectï¿½e que si le capteur ï¿½ prï¿½sentï¿½ un ï¿½cho moins long.
 #define PERIOD_MEASURE			100
 
 
@@ -35,7 +35,7 @@
 
 
 
-#define US_SPEED_IN_AIR			344	//mm/ms (à environ 20°)
+#define US_SPEED_IN_AIR			344	//mm/ms (ï¿½ environ 20ï¿½)
 typedef enum
 {
 	HCSR04_STATE_INEXISTANT = 0,
@@ -74,12 +74,12 @@ static uint32_t HCSR04_ReadTimerUs(void);
 
 
 /*
- * Fonction de démonstration permettant d'apréhender l'utilisation de ce module logiciel
- * @pre	cette fonction doit être appelée en tâche de fond
- * @pre	il faut avoir préalablement initialisé un port série (cette fonction utilise printf)
- * @pre ATTENTION, le signal ECHO arrive en 5V. Il ne faut pas utiliser pour le recevoir une broche non tolérante 5V. (voir le classeur Ports_STM32F1.xls)
- * @post cette fonction effectue des mesures régulières avec un capteur HCSR04 placé sur les ports PC7 (Trig) et PB6 (Echo)
- * @note cette fonction n'utilise que des fonctions publiques. Elle peut donc être dupliquée à l'extérieur de ce module logiciel.
+ * Fonction de dï¿½monstration permettant d'aprï¿½hender l'utilisation de ce module logiciel
+ * @pre	cette fonction doit ï¿½tre appelï¿½e en tï¿½che de fond
+ * @pre	il faut avoir prï¿½alablement initialisï¿½ un port sï¿½rie (cette fonction utilise printf)
+ * @pre ATTENTION, le signal ECHO arrive en 5V. Il ne faut pas utiliser pour le recevoir une broche non tolï¿½rante 5V. (voir le classeur Ports_STM32F1.xls)
+ * @post cette fonction effectue des mesures rï¿½guliï¿½res avec un capteur HCSR04 placï¿½ sur les ports PC7 (Trig) et PB6 (Echo)
+ * @note cette fonction n'utilise que des fonctions publiques. Elle peut donc ï¿½tre dupliquï¿½e ï¿½ l'extï¿½rieur de ce module logiciel.
  */
 
 /**/
@@ -100,7 +100,7 @@ void HCSR04_state_machine(void)
 	static uint8_t id_sensor;
 	uint16_t distance;
 
-	//ne pas oublier d'appeler en tâche de fond cette fonction.
+	//ne pas oublier d'appeler en tï¿½che de fond cette fonction.
 	HCSR04_process_main();
 
 
@@ -109,12 +109,12 @@ void HCSR04_state_machine(void)
 		case INIT:
 			if(HCSR04_add(&id_sensor, GPIOC, GPIO_PIN_7, GPIOB, GPIO_PIN_6) != HAL_OK)
 			{
-				//printf("HCSR04 non ajouté - erreur gênante\n");
+				//printf("HCSR04 non ajoutï¿½ - erreur gï¿½nante\n");
 				state = FAIL;
 			}
 			else
 			{
-				//printf("HCSR04 ajouté\n");
+				//printf("HCSR04 ajoutï¿½\n");
 				state = LAUNCH_MEASURE;
 			}
 			break;
@@ -127,7 +127,7 @@ void HCSR04_state_machine(void)
 			switch(HCSR04_get_value(id_sensor, &distance))
 			{
 				case HAL_BUSY:
-					//rien à faire... on attend...
+					//rien ï¿½ faire... on attend...
 					break;
 				case HAL_OK:
 					printf("sensor %d - distance : %d\n", id_sensor, distance);
@@ -137,7 +137,7 @@ void HCSR04_state_machine(void)
 					state = WAIT_BEFORE_NEXT_MEASURE;
 					break;
 				case HAL_ERROR:
-					//printf("sensor %d - erreur ou mesure non lancée\n", id_sensor);
+					//printf("sensor %d - erreur ou mesure non lancï¿½e\n", id_sensor);
 					state = WAIT_BEFORE_NEXT_MEASURE;
 					break;
 
@@ -174,7 +174,7 @@ void HCSR04_demo_state_machine(void)
 	static uint8_t id_sensor;
 	uint16_t distance;
 
-	//ne pas oublier d'appeler en tâche de fond cette fonction.
+	//ne pas oublier d'appeler en tï¿½che de fond cette fonction.
 	HCSR04_process_main();
 
 
@@ -183,12 +183,12 @@ void HCSR04_demo_state_machine(void)
 		case INIT:
 			if(HCSR04_add(&id_sensor, GPIOC, GPIO_PIN_7, GPIOB, GPIO_PIN_6) != HAL_OK)
 			{
-				//printf("HCSR04 non ajouté - erreur gênante\n");
+				//printf("HCSR04 non ajoutï¿½ - erreur gï¿½nante\n");
 				state = FAIL;
 			}
 			else
 			{
-				//printf("HCSR04 ajouté\n");
+				//printf("HCSR04 ajoutï¿½\n");
 				state = LAUNCH_MEASURE;
 			}
 			break;
@@ -203,7 +203,7 @@ void HCSR04_demo_state_machine(void)
 			switch(HCSR04_get_value(id_sensor, &distance))
 			{
 				case HAL_BUSY:
-					//rien à faire... on attend...
+					//rien ï¿½ faire... on attend...
 					break;
 
 				case HAL_OK:
@@ -212,7 +212,7 @@ void HCSR04_demo_state_machine(void)
 					break;
 
 				case HAL_ERROR:
-					//printf("sensor %d - erreur ou mesure non lancée\n", id_sensor);
+					//printf("sensor %d - erreur ou mesure non lancï¿½e\n", id_sensor);
 					state = WAIT_BEFORE_NEXT_MEASURE;
 					break;
 
@@ -232,7 +232,7 @@ void HCSR04_demo_state_machine(void)
 }
 
 /*
- * @pre	il ne peut pas y avoir plusieurs capteurs sur un même numéro de broche (par exemple PA0 et PB0 !)
+ * @pre	il ne peut pas y avoir plusieurs capteurs sur un mï¿½me numï¿½ro de broche (par exemple PA0 et PB0 !)
  */
 HAL_StatusTypeDef HCSR04_add(uint8_t * id, GPIO_TypeDef * TRIG_GPIO, uint16_t TRIG_PIN, GPIO_TypeDef * ECHO_GPIO, uint16_t ECHO_PIN)
 {
@@ -242,7 +242,7 @@ HAL_StatusTypeDef HCSR04_add(uint8_t * id, GPIO_TypeDef * TRIG_GPIO, uint16_t TR
 	{
 		if(sensors[i].state == HCSR04_STATE_INEXISTANT)
 		{
-			//on a trouvé une case libre.
+			//on a trouvï¿½ une case libre.
 			*id = i;
 			sensors[i].state = HCSR04_STATE_INITIALIZED;
 			sensors[i].trig_gpio = TRIG_GPIO;
@@ -274,14 +274,14 @@ void HCSR04_run_measure(uint8_t id)
 
 
 /*
- * @brief Fonction de callback devant être appelée uniquement par les routines d'interruptions.
+ * @brief Fonction de callback devant ï¿½tre appelï¿½e uniquement par les routines d'interruptions.
  */
 static void HCSR04_callback(uint16_t pin)
 {
 	uint8_t i;
 	for(i=0; i<HCSR04_NB_SENSORS; i++)
 	{
-		if(sensors[i].echo_pin == pin)	//trouvé !
+		if(sensors[i].echo_pin == pin)	//trouvï¿½ !
 		{
 			if(sensors[i].state == HCSR04_STATE_WAIT_ECHO_RISING)
 			{
@@ -314,15 +314,15 @@ static void HCSR04_trig(uint8_t id)
 		sensors[id].state = HCSR04_STATE_TRIG;
 		HAL_GPIO_WritePin(sensors[id].trig_gpio, sensors[id].trig_pin, 1);	//trig on
 		tlocal = HCSR04_ReadTimerUs();
-		while(HCSR04_ReadTimerUs() - tlocal < 10);	//délai d'au moins 10us
+		while(HCSR04_ReadTimerUs() - tlocal < 10);	//dï¿½lai d'au moins 10us
 		HAL_GPIO_WritePin(sensors[id].trig_gpio, sensors[id].trig_pin, 0);	//trig off
 		sensors[id].state = HCSR04_STATE_WAIT_ECHO_RISING;
 		sensors[id].ttrig = HAL_GetTick();
 	}
 }
 
-#define HCSR04_PERIOD_TIMER		(40000)				//on compte jusqu'à 40000 * 2.5us = 100ms (soit 34m)
-#define HCSR04_PRESCALER_TIMER	(64*10/4)			//on compte des [2.5us] Cette résolution correspond à 0.85mm
+#define HCSR04_PERIOD_TIMER		(40000)				//on compte jusqu'ï¿½ 40000 * 2.5us = 100ms (soit 34m)
+#define HCSR04_PRESCALER_TIMER	(64*10/4)			//on compte des [2.5us] Cette rï¿½solution correspond ï¿½ 0.85mm
 
 static uint32_t HCSR04_ReadTimerUs(void)
 {
@@ -347,7 +347,7 @@ void HCSR04_process_main(void)
 			case HCSR04_STATE_INEXISTANT:
 				break;
 			case HCSR04_STATE_INITIALIZED:
-				//rien à faire, on attend une demande de mesure via HCSR04_run_measure()
+				//rien ï¿½ faire, on attend une demande de mesure via HCSR04_run_measure()
 				break;
 			case HCSR04_STATE_TRIG:
 				//neven happen
@@ -361,7 +361,7 @@ void HCSR04_process_main(void)
 				}
 				break;
 			case HCSR04_STATE_ECHO_RECEIVED:
-				//on a correctement reçu un echo
+				//on a correctement reï¿½u un echo
 				//calcul de la distance...
 				if(HCSR04_compute_distance(i) == HAL_OK)
 					sensors[i].state = HCSR04_STATE_IDLE;
@@ -369,13 +369,13 @@ void HCSR04_process_main(void)
 					sensors[i].state = HCSR04_STATE_ERROR;
 				break;
 			case HCSR04_STATE_ERROR:
-				//rien à faire, on attend une demande de mesure via HCSR04_run_measure()
+				//rien ï¿½ faire, on attend une demande de mesure via HCSR04_run_measure()
 				break;
 			case HCSR04_STATE_TIMEOUT:
-				//rien à faire, on attend une demande de mesure via HCSR04_run_measure()
+				//rien ï¿½ faire, on attend une demande de mesure via HCSR04_run_measure()
 				break;
 			case HCSR04_STATE_IDLE:
-				//rien à faire, on attend une demande de mesure via HCSR04_run_measure()
+				//rien ï¿½ faire, on attend une demande de mesure via HCSR04_run_measure()
 				break;
 			default:
 				break;
@@ -387,7 +387,7 @@ static HAL_StatusTypeDef HCSR04_compute_distance(uint8_t id)
 {
 	uint32_t distance;
 
-	sensors[id].distance = (uint16_t)0;	//hypothèse tant qu'on a pas une valeur correcte.
+	sensors[id].distance = (uint16_t)0;	//hypothï¿½se tant qu'on a pas une valeur correcte.
 
 	if(sensors[id].state != HCSR04_STATE_ECHO_RECEIVED)
 		return HAL_ERROR;
@@ -399,24 +399,24 @@ static HAL_StatusTypeDef HCSR04_compute_distance(uint8_t id)
 		return HAL_ERROR;
 
 	distance = sensors[id].tfalling - sensors[id].trising;
-	distance *=  HCSR04_PRESCALER_TIMER;	//distance est exprimé ici en pulses de timer purs
+	distance *=  HCSR04_PRESCALER_TIMER;	//distance est exprimï¿½ ici en pulses de timer purs
 
 	uint32_t freq;
 	if(HCSR04_TIMER == TIMER1_ID)
 	{
-		//Fréquence du TIMER1 est PCLK2 lorsque APB2 Prescaler vaut 1, sinon : PCLK2*2
+		//Frï¿½quence du TIMER1 est PCLK2 lorsque APB2 Prescaler vaut 1, sinon : PCLK2*2
 		freq = HAL_RCC_GetPCLK2Freq();
 		if((RCC->CFGR & RCC_CFGR_PPRE2) >> 11 != RCC_HCLK_DIV1)
 			freq *= 2;
 	}
 	else
 	{
-		//Fréquence des TIMERS 2,3,4 est PCLK1 lorsque APB1 Prescaler vaut 1, sinon : PCLK1*2
+		//Frï¿½quence des TIMERS 2,3,4 est PCLK1 lorsque APB1 Prescaler vaut 1, sinon : PCLK1*2
 		freq = HAL_RCC_GetPCLK1Freq();
 		if((RCC->CFGR & RCC_CFGR_PPRE1) >> 8 != RCC_HCLK_DIV1)
 			freq *= 2;
 	}
-	freq /= 1000000;	//fréquence exprimée en MHz
+	freq /= 1000000;	//frï¿½quence exprimï¿½e en MHz
 	if(!freq)
 		return HAL_ERROR;
 
@@ -425,7 +425,7 @@ static HAL_StatusTypeDef HCSR04_compute_distance(uint8_t id)
 	distance /= 1000;				//distance aller-retour [mm]
 	distance /= 2;					//distance aller simple [mm]
 
-	if(distance > 5000)//au delà 5m, on considère que la distance n'a pas été acquise (ou bien est infinie)
+	if(distance > 5000)//au delï¿½ 5m, on considï¿½re que la distance n'a pas ï¿½tï¿½ acquise (ou bien est infinie)
 		distance = 0;
 
 	sensors[id].distance = (uint16_t)distance;
@@ -434,27 +434,27 @@ static HAL_StatusTypeDef HCSR04_compute_distance(uint8_t id)
 }
 
 /*
- * @brief	Cette fonction permet de récupérer la distance mesurée par le capteur dont l'id est fournie
+ * @brief	Cette fonction permet de rï¿½cupï¿½rer la distance mesurï¿½e par le capteur dont l'id est fournie
  * @param	id : identifiant du capteur
- * @param	distance : pointeur vers une case mémoire qui sera renseignée par cette fonction
+ * @param	distance : pointeur vers une case mï¿½moire qui sera renseignï¿½e par cette fonction
  * @ret		HAL_OK si la mesure est disponible et fournie. HAL_ERROR sinon.
- * @pre		le capteur doit avoir été initialisé préalablement
- * @pre		distance doit être un pointeur non NULL
+ * @pre		le capteur doit avoir ï¿½tï¿½ initialisï¿½ prï¿½alablement
+ * @pre		distance doit ï¿½tre un pointeur non NULL
  */
 HAL_StatusTypeDef HCSR04_get_value(uint8_t id, uint16_t * distance)
 {
 	HAL_StatusTypeDef ret = HAL_BUSY;
 	switch(sensors[id].state)
 	{
-		case HCSR04_STATE_IDLE:	//on a reçu une distance
+		case HCSR04_STATE_IDLE:	//on a reï¿½u une distance
 			*distance = sensors[id].distance;
 			ret = HAL_OK;
 			break;
 		case HCSR04_STATE_TIMEOUT:
 			ret = HAL_TIMEOUT;
 			break;
-		case HCSR04_STATE_INEXISTANT:	//no break;		//il est anormal de demander la valeur d'un capteur non initialisé
-		case HCSR04_STATE_INITIALIZED:	//no break;		//il est anormal de demander la valeur d'un capteur non lancé en mesure.
+		case HCSR04_STATE_INEXISTANT:	//no break;		//il est anormal de demander la valeur d'un capteur non initialisï¿½
+		case HCSR04_STATE_INITIALIZED:	//no break;		//il est anormal de demander la valeur d'un capteur non lancï¿½ en mesure.
 		case HCSR04_STATE_ERROR:						//erreur interne lors du calcul de distance
 			ret = HAL_ERROR;
 			break;
