@@ -69,7 +69,7 @@ void print_screen_current_state_init(uint16_t x_pos, uint16_t y_pos);
 
 
 void drawCloseButton(void);
-void DrawQuadrilateral(Quadrilateral quadrilatere_local);
+void DrawQuadrilateral(Quadrilateral quadrilatere_local, uint16_t color);
 void DrawQuadrilateralWithText(Quadrilateral quadrilatere_local, const char *string);
 void DrawCircle(Circle cercle_local);
 

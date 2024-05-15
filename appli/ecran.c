@@ -70,8 +70,8 @@ bool_e isClickedOnCircle(uint16_t click_x, uint16_t click_y, uint16_t circle_x, 
 
 
 
-void DrawQuadrilateral(Quadrilateral quadrilatere_local){
-	ILI9341_DrawRectangle(quadrilatere_local.x1, quadrilatere_local.y1, quadrilatere_local.x2, quadrilatere_local.y2, ILI9341_COLOR_BLACK);
+void DrawQuadrilateral(Quadrilateral quadrilatere_local, uint16_t color){
+	ILI9341_DrawRectangle(quadrilatere_local.x1, quadrilatere_local.y1, quadrilatere_local.x2, quadrilatere_local.y2, color);
 }
 
 void DrawQuadrilateralWithText(Quadrilateral quadrilatere_local, const char *string){
@@ -82,7 +82,7 @@ void DrawQuadrilateralWithText(Quadrilateral quadrilatere_local, const char *str
 
 void DrawMenu(void){
 	//Code temporaire
-	DrawQuadrilateral(static_quadrilateral);		// Dessiner le quadrilatère
+	DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_BLACK);		// Dessiner le quadrilatère
 	//Code temporaire
 }
 

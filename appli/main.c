@@ -100,7 +100,7 @@ int main(void)
 
 
 	Screen_init();
-	//SERVO_init();
+	SERVO_init();
 	BUTTON_init();
 
 
@@ -180,7 +180,7 @@ static void state_machine(void)
             }
 
             HCSR04_state_machine();
-            //SERVO_rotation();
+            SERVO_rotation();
 
             //printf("print scanning environnment %u\n", DISTANCE_GLOBAL);
 
@@ -240,10 +240,6 @@ void isClicked(void) {
 	static uint16_t static_x,static_y;
 	uint16_t x, y;
 
-	//code temporaire
-	DrawQuadrilateral(static_quadrilateral);		// Dessiner le quadrilatï¿½re
-	//code temporaire
-
 	if(XPT2046_getMedianCoordinates(&x, &y, XPT2046_COORDINATE_SCREEN_RELATIVE))
 	{
 		//ILI9341_DrawCircle(static_x, static_y, 15,ILI9341_COLOR_WHITE);
@@ -256,10 +252,18 @@ void isClicked(void) {
 
 		if(isClickedOnRectangle(static_x, static_y, static_quadrilateral.x1, static_quadrilateral.y1, static_quadrilateral.x2, static_quadrilateral.y2)) {
 			uint16_t a = 3;
+
+			DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_WHITE);		// Supprimer le quadrilatère
+
 			state = PAUSE;
 		}
 		else if(isClickedOnCircle(static_x, static_y, closeButton.centerX, closeButton.centerY, closeButton.radius)) {
 			uint16_t a = 3;
+
+			//code temporaire
+			DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_BLACK);		// Dessiner le quadrilatère
+			//code temporaire
+
 			state = MENU_CHOICE;
 		}
 	}
