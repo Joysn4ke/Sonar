@@ -242,15 +242,17 @@ void isClicked(void) {
 	static uint16_t static_x,static_y;
 	uint16_t x, y;
 
+
 	//code temporaire
+
 	DrawQuadrilateral(static_quadrilateral);		// Dessiner le quadrilat�re
 	//code temporaire
 
 	if(XPT2046_getMedianCoordinates(&x, &y, XPT2046_COORDINATE_SCREEN_RELATIVE))
 	{
 		//ILI9341_DrawCircle(static_x, static_y, 15,ILI9341_COLOR_WHITE);
-		//ILI9341_DrawCircle(x, y, 15, ILI9341_COLOR_BLUE);
-
+		ILI9341_DrawCircle(x, y, 15, ILI9341_COLOR_BLUE);
+		printf("Click");
 		//print_screen_current_state("Clicked", closeButton.centerY);
 
 		static_x = x;
