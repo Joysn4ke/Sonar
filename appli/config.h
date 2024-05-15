@@ -3,8 +3,8 @@
 #include "stm32f1xx_hal.h"
 
 //Choix de la cible utilis�e.
-#define NUCLEO	1
-#define BLUEPILL 0
+#define NUCLEO	0
+#define BLUEPILL 1
 
 #define MY_BLUEPILL_IS_COUNTERFEIT	BLUEPILL
 

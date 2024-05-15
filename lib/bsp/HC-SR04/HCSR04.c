@@ -107,7 +107,7 @@ void HCSR04_state_machine(void)
 	switch(state)
 	{
 		case INIT:
-			if(HCSR04_add(&id_sensor, GPIOC, GPIO_PIN_7, GPIOB, GPIO_PIN_6) != HAL_OK)
+			if(HCSR04_add(&id_sensor, GPIOB, GPIO_PIN_5, GPIOB, GPIO_PIN_4) != HAL_OK)
 			{
 				//printf("HCSR04 non ajout� - erreur g�nante\n");
 				state = FAIL;
@@ -181,7 +181,7 @@ void HCSR04_demo_state_machine(void)
 	switch(state)
 	{
 		case INIT:
-			if(HCSR04_add(&id_sensor, GPIOC, GPIO_PIN_7, GPIOB, GPIO_PIN_6) != HAL_OK)
+			if(HCSR04_add(&id_sensor, GPIOB, GPIO_PIN_5, GPIOB, GPIO_PIN_4) != HAL_OK)  //GPIOC, 7, GPIOB, 6
 			{
 				//printf("HCSR04 non ajout� - erreur g�nante\n");
 				state = FAIL;
