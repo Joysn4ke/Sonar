@@ -3,4 +3,4 @@ main.c:61:8:readButton	8	static
 main.c:68:6:process_ms	4	static
 main.c:78:5:main	16	static
 main.c:124:13:state_machine	96	static
-main.c:237:6:isClicked	32	static
+main.c:239:6:isClicked	32	static

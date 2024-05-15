@@ -220,6 +220,8 @@ static void state_machine(void)
             	char buffer[50];
 				sprintf(buffer, "%d", DISTANCE_GLOBAL);
 
+
+
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, "Distance : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Distance : ", &Font_7x10), closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, &buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 
