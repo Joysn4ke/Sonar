@@ -130,7 +130,7 @@ void HCSR04_state_machine(void)
 					//rien à faire... on attend...
 					break;
 				case HAL_OK:
-					printf("sensor %d - distance : %d\n", id_sensor, distance);
+					//printf("sensor %d - distance : %d\n", id_sensor, distance);
 
 					DISTANCE_GLOBAL = distance;
 

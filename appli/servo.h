@@ -14,6 +14,7 @@ void SERVOinit(void);
 void SERVO_set_position(uint16_t position);
 void SERVO_rotation(void);
 
+uint16_t getPosition(void);
 
 
 #endif /* SERVO_H */

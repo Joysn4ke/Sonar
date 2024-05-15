@@ -167,20 +167,36 @@ static void state_machine(void)
         case SCANNING_ENVIRONNEMENT:
             if(entrance)
             {
-                //printf("[STATEMACHINE] scanne l'environnement\n");
-
-            	uint32_t current_time = HAL_GetTick();		// Obtenir le temps actuel en millisecondes
-
-            	if (current_time - last_display_time >= DISPLAY_REFRESH_INTERVAL) {
-					ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
-					ILI9341_DrawFilledRectangle(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10) + string_length("Scanne environnement", &Font_7x10), closeButton.centerY + TEXT_HEIGHT_7_10, ILI9341_COLOR_WHITE);
-					ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, "Scanne environnement", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
-            	}
-            	last_display_time = current_time; // Mettre � jour le temps du dernier affichage
+            	ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+				ILI9341_DrawFilledRectangle(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10) + string_length("Scanne environnement", &Font_7x10), closeButton.centerY + TEXT_HEIGHT_7_10, ILI9341_COLOR_WHITE);
+				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, "Scanne environnement", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
             }
+
+            //printf("[STATEMACHINE] scanne l'environnement\n");
+
 
             HCSR04_state_machine();
             SERVO_rotation();
+
+            uint32_t current_time = HAL_GetTick();		// Obtenir le temps actuel en millisecondes
+
+			if (current_time - last_display_time >= DISPLAY_REFRESH_INTERVAL) {
+				char buffer[50];
+				//printf("Position : %d", getPosition());
+
+
+				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY  + TEXT_HEIGHT_7_10 * 4, "Position moteur : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+
+				sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
+				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Position moteur : ", &Font_7x10), closeButton.centerY  + TEXT_HEIGHT_7_10 * 4, &buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
+
+
+				sprintf(buffer, "%d", getPosition());
+				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Position moteur : ", &Font_7x10), closeButton.centerY  + TEXT_HEIGHT_7_10 * 4, &buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+
+				//memset(buffer, 0, sizeof(buffer));
+				last_display_time = current_time; // Mettre � jour le temps du dernier affichage
+			}
 
             //printf("print scanning environnment %u\n", DISTANCE_GLOBAL);
 
@@ -191,8 +207,8 @@ static void state_machine(void)
                 state = SCREEN_DISPLAY;
             }
             else{
-            	//state = SCANNING_ENVIRONNEMENT;
-            	state = PAUSE;
+            	state = SCANNING_ENVIRONNEMENT;
+            	//state = PAUSE;
             }
 
             isClicked();
@@ -201,6 +217,7 @@ static void state_machine(void)
         case PAUSE:
 			if(entrance) {
 				t = 3000;
+				//t = 30;
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 				ILI9341_DrawFilledRectangle(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10) + string_length("Scanne environnement", &Font_7x10), closeButton.centerY + TEXT_HEIGHT_7_10, ILI9341_COLOR_WHITE);
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, "Pause", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
@@ -218,11 +235,14 @@ static void state_machine(void)
             	//printf("print screen display %u\n", DISTANCE_GLOBAL);
 
             	char buffer[50];
-				sprintf(buffer, "%d", DISTANCE_GLOBAL);
-
 
 
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, "Distance : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+
+				sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
+				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Distance : ", &Font_7x10), closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, &buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
+
+				sprintf(buffer, "%d", DISTANCE_GLOBAL);
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Distance : ", &Font_7x10), closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, &buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 
                 state = SCANNING_ENVIRONNEMENT;

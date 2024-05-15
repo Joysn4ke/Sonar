@@ -29,7 +29,7 @@
 
 #define TEXT_LENGTH_CURRENT_STATE_7_10	0x0070			//16*7=112(10) Pixels
 
-#define DISPLAY_REFRESH_INTERVAL 250			// Déclarer une variable pour stocker l'intervalle de rafraîchissement de l'affichage (en millisecondes)
+#define DISPLAY_REFRESH_INTERVAL 500			// Déclarer une variable pour stocker l'intervalle de rafraîchissement de l'affichage (en millisecondes)
 
 static uint32_t last_display_time = 0;			// Déclarer une variable statique pour stocker le temps du dernier affichage
 
