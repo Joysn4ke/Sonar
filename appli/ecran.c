@@ -13,6 +13,9 @@ extern Quadrilateral static_quadrilateral;
 extern Circle closeButton;
 
 //modif
+//zdezduihdeioézfehkj
+//zeljioeérgu
+//refiveriofjh
 
 void Screen_init(void){
 	ILI9341_Init();
