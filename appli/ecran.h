@@ -16,8 +16,8 @@
 #define SCREEN_WIDTH			0x0140			//320(10) Pixels
 #define SCREEN_LENGTH			0x00F0			//240(10) Pixels
 
-#define SCREEN_CENTER_X     (SCREEN_WIDTH / 2)   // Centre de l'écran en x
-#define SCREEN_CENTER_Y     (SCREEN_LENGTH / 2)  // Centre de l'écran en y
+#define SCREEN_CENTER_X     (SCREEN_WIDTH / 2)   // Centre de l'ï¿½cran en x
+#define SCREEN_CENTER_Y     (SCREEN_LENGTH / 2)  // Centre de l'ï¿½cran en y
 /* Screen Dimension */
 
 
@@ -29,9 +29,9 @@
 
 #define TEXT_LENGTH_CURRENT_STATE_7_10	0x0070			//16*7=112(10) Pixels
 
-#define DISPLAY_REFRESH_INTERVAL 250			// Déclarer une variable pour stocker l'intervalle de rafraîchissement de l'affichage (en millisecondes)
+#define DISPLAY_REFRESH_INTERVAL 250			// Dï¿½clarer une variable pour stocker l'intervalle de rafraï¿½chissement de l'affichage (en millisecondes)
 
-static uint32_t last_display_time = 0;			// Déclarer une variable statique pour stocker le temps du dernier affichage
+static uint32_t last_display_time = 0;			// Dï¿½clarer une variable statique pour stocker le temps du dernier affichage
 
 
 typedef struct {
@@ -49,13 +49,15 @@ typedef struct {
 
 
 
-//Formes écran
+//Formes ï¿½cran
 static Quadrilateral static_quadrilateral = {
 		SCREEN_CENTER_X,
 		SCREEN_CENTER_Y,
 		SCREEN_CENTER_X+SCREEN_CENTER_X/2,
 		SCREEN_CENTER_Y+SCREEN_CENTER_Y/2
 };
+
+
 
 
 static Circle closeButton = {30, 30, 20};
@@ -69,7 +71,7 @@ void print_screen_current_state_init(uint16_t x_pos, uint16_t y_pos);
 
 
 void drawCloseButton(void);
-void DrawQuadrilateral(Quadrilateral quadrilatere_local);
+void DrawQuadrilateral(Quadrilateral quadrilatere_local, uint16_t color);
 void DrawQuadrilateralWithText(Quadrilateral quadrilatere_local, const char *string);
 void DrawCircle(Circle cercle_local);
 
