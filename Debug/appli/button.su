@@ -1,3 +1,0 @@
-button.c:21:6:BUTTON_init	16	static
-button.c:31:13:process_ms	4	static
-button.c:47:16:BUTTON_state_machine	16	static

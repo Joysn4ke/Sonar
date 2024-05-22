@@ -1,6 +1,0 @@
-stm32f1_pwm.c:16:6:PWM_test	16	static
-stm32f1_pwm.c:47:6:PWM_run	64	static
-stm32f1_pwm.c:86:6:PWM_set_duty	32	static
-stm32f1_pwm.c:96:6:PWM_set_prescaler	24	static
-stm32f1_pwm.c:105:6:PWM_set_period_and_duty	32	static
-stm32f1_pwm.c:127:6:PWM_configure_pin	80	static
