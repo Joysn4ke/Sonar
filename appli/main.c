@@ -74,7 +74,6 @@ void process_ms(void)
 
 
 
-
 int main(void)
 {
 	//Initialisation de la couche logicielle HAL (Hardware Abstraction Layer)
@@ -150,10 +149,15 @@ static void state_machine(void)
             if(entrance)
             {
                 //printf("[STATEMACHINE] choix menu\n");
+				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY  + TEXT_HEIGHT_7_10 * 4, "AAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);		//Hide distance display
+				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, "AAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);		//Hide position motor display
+
+				DrawMenu();
 
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 				ILI9341_DrawFilledRectangle(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10) + string_length("Scanne environnement", &Font_7x10), closeButton.centerY + TEXT_HEIGHT_7_10, ILI9341_COLOR_WHITE);
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, "Choix menu", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
+			
 			}
 
             test_scan = scanning_enable();
@@ -161,6 +165,7 @@ static void state_machine(void)
             if (test_scan)
             {
                 state = SCANNING_ENVIRONNEMENT;
+                HideMenu();
             }
             break;
 
@@ -200,9 +205,29 @@ static void state_machine(void)
 
             //printf("print scanning environnment %u\n", DISTANCE_GLOBAL);
 
+			static uint16_t distance;
+			uint32_t sum = 0;
+			uint8_t valid_sensor_count = 0;
 
-            if (DISTANCE_GLOBAL > 0)
-            //if (distance > 0)
+			for (uint8_t i = 0; i < 5; i++) {
+				HAL_StatusTypeDef status = HCSR04_get_value(i, &distance);
+				if (status == HAL_OK) {
+					sum += distance;
+					valid_sensor_count++;
+				}
+			}
+
+			float average_distance;
+
+			if (valid_sensor_count > 0) {
+				average_distance = (float)sum / valid_sensor_count;
+				distance = (uint16_t) average_distance;
+			} else {
+				distance = 0;
+			}
+
+            //if (DISTANCE_GLOBAL > 0)
+            if (distance > 0)
             {
                 state = SCREEN_DISPLAY;
             }
@@ -242,7 +267,8 @@ static void state_machine(void)
 				sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Distance : ", &Font_7x10), closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, &buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
 
-				sprintf(buffer, "%d", DISTANCE_GLOBAL);
+				//sprintf(buffer, "%d", DISTANCE_GLOBAL);
+				sprintf(buffer, "%d", distance);
 				ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Distance : ", &Font_7x10), closeButton.centerY  + TEXT_HEIGHT_7_10 * 2, &buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 
                 state = SCANNING_ENVIRONNEMENT;
@@ -260,6 +286,14 @@ void isClicked(void) {
 	static uint16_t static_x,static_y;
 	uint16_t x, y;
 
+	uint16_t x1 = SCREEN_WIDTH/4;
+	uint16_t y1 = SCREEN_LENGTH/4;
+	uint16_t x2 = SCREEN_WIDTH - SCREEN_WIDTH/4;
+	uint16_t y2 = SCREEN_LENGTH/4 + 25;
+
+	uint16_t delta1 = 2;
+	uint16_t delta2 = y2 - y1 + 15;
+
 	if(XPT2046_getMedianCoordinates(&x, &y, XPT2046_COORDINATE_SCREEN_RELATIVE))
 	{
 		//ILI9341_DrawCircle(static_x, static_y, 15,ILI9341_COLOR_WHITE);
@@ -270,18 +304,21 @@ void isClicked(void) {
 		static_x = x;
 		static_y = y;
 
-		if(isClickedOnRectangle(static_x, static_y, static_quadrilateral.x1, static_quadrilateral.y1, static_quadrilateral.x2, static_quadrilateral.y2)) {
-			uint16_t a = 3;
+		//if(isClickedOnRectangle(static_x, static_y, static_quadrilateral.x1, static_quadrilateral.y1, static_quadrilateral.x2, static_quadrilateral.y2)) {
+		if(isClickedOnRectangle(static_x, static_y, x1, y1, x2, y2)) {	
+			//uint16_t a = 3;
 
-			DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_WHITE);		// Supprimer le quadrilatère
+			//code temporaire
+			DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_WHITE);		// Supprimer le quadrilatï¿½re
+			//code temporaire
 
 			state = PAUSE;
 		}
 		else if(isClickedOnCircle(static_x, static_y, closeButton.centerX, closeButton.centerY, closeButton.radius)) {
-			uint16_t a = 3;
+			//uint16_t a = 3;
 
 			//code temporaire
-			DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_BLACK);		// Dessiner le quadrilatère
+			DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_BLACK);		// Dessiner le quadrilatï¿½re
 			//code temporaire
 
 			state = MENU_CHOICE;
