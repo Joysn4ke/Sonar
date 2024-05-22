@@ -2815,11 +2815,11 @@ static void state_machine(void)
  80019fa:	e002      	b.n	8001a02 <state_machine+0x23e>
             }
             else{
-            	//state = SCANNING_ENVIRONNEMENT;
-            	state = PAUSE;
+            	state = SCANNING_ENVIRONNEMENT;
  80019fc:	4b02      	ldr	r3, [pc, #8]	; (8001a08 <state_machine+0x244>)
- 80019fe:	2203      	movs	r2, #3
+ 80019fe:	2202      	movs	r2, #2
  8001a00:	701a      	strb	r2, [r3, #0]
+
             }
 
             isClicked();

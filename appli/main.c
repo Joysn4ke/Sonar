@@ -193,8 +193,8 @@ static void state_machine(void)
                 state = SCREEN_DISPLAY;
             }
             else{
-            	//state = SCANNING_ENVIRONNEMENT;
-            	state = PAUSE;
+            	state = SCANNING_ENVIRONNEMENT;
+
             }
 
             isClicked();
