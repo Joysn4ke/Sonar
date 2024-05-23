@@ -37,12 +37,13 @@ void process_ms(void)
 
 static uint16_t strLenghtState = 112;					//uint16_t strLenghtState = string_length("Current state : ", &Font_7x10);
 static uint16_t strLenghtPosMot = 126; 					//uint16_t strLenghtPosMot = string_length("Position moteur : ", &Font_7x10);
-static uint16_t strLenghtDistance = 177;				//uint16_t strLenghtDistance = string_length("Distance : ", &Font_7x10);
+static uint16_t strLenghtDistance = 70;				//uint16_t strLenghtDistance = string_length("Distance : ", &Font_7x10);
 static uint16_t strLenghtScanEnv = 140;					//uint16_t strLenghtScanEnv = string_length("Scanne environnement", &Font_7x10);
 
 static uint16_t x = 30 + 20 + TEXT_GAP_7_10;		//static uint16_t x = closeButton.centerX + closeButton.radius + TEXT_GAP_7_10;
 static uint16_t y = 30 + TEXT_HEIGHT_7_10;			//static uint16_t y = closeButton.centerY + TEXT_HEIGHT_7_10;
-
+static uint16_t y2 = 30 + TEXT_HEIGHT_7_10 * 2;
+static uint16_t y4 = 30 + TEXT_HEIGHT_7_10 * 4;
 
 int main(void)
 {
@@ -51,8 +52,8 @@ int main(void)
 	HAL_Init();
 
 	//Initialisation de l'UART2   la vitesse de 115200 bauds/secondes (92kbits/s) PA2 : Tx  | PA3 : Rx.
-		//Attention, les pins PA2 et PA3 ne sont pas reli es jusqu'au connecteur de la Nucleo.
-		//Ces broches sont redirig es vers la sonde de d bogage, la liaison UART  tant ensuite encapsul e sur l'USB vers le PC de d veloppement.
+	//Attention, les pins PA2 et PA3 ne sont pas reli es jusqu'au connecteur de la Nucleo.
+	//Ces broches sont redirig es vers la sonde de d bogage, la liaison UART  tant ensuite encapsul e sur l'USB vers le PC de d veloppement.
 	UART_init(UART2_ID,115200);
 
 	//"Indique que les printf sortent vers le p riph rique UART2."
@@ -137,8 +138,8 @@ static void state_machine(void)
             {
                 //printf("[STATEMACHINE] choix menu\n");
 
-				ILI9341_Puts(x, (uint16_t)(y * 4), "AAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);		//Hide distance display
-				ILI9341_Puts(x, (uint16_t)(y * 2), "AAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);		//Hide position motor display
+				ILI9341_Puts(x, y4, "AAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);		//Hide distance display
+				ILI9341_Puts(x, y2, "AAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);		//Hide position motor display
 
 				DrawMenu();
 
@@ -177,14 +178,14 @@ static void state_machine(void)
 				char buffer[50];
 				//printf("Position : %d", getPosition());
 
-				ILI9341_Puts(x, (uint16_t)(y * 4), "Position moteur : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+				ILI9341_Puts(x, y4, "Position moteur : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 
 				sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
-				ILI9341_Puts((uint16_t)(x + strLenghtPosMot), (uint16_t)(y * 4), buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
+				ILI9341_Puts((uint16_t)(x + strLenghtPosMot), y4, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
 
 
 				sprintf(buffer, "%d", getPosition());
-				ILI9341_Puts((uint16_t)(x + strLenghtPosMot), (uint16_t)(y * 4), buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+				ILI9341_Puts((uint16_t)(x + strLenghtPosMot), y4, buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 
 				last_display_time = current_time; // Mettre � jour le temps du dernier affichage
 			}
@@ -255,14 +256,14 @@ static void state_machine(void)
 
             	char buffer[50];
 
-				ILI9341_Puts(x, (uint16_t)(closeButton.centerY + TEXT_HEIGHT_7_10 * 2), "Distance : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+				ILI9341_Puts(x, y2, "Distance : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 
 				sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
-				ILI9341_Puts((uint16_t)(x + strLenghtDistance), (uint16_t)(y * 2), buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
+				ILI9341_Puts((uint16_t)(x + strLenghtDistance), y2, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
 
 				//sprintf(buffer, "%d", DISTANCE_GLOBAL);
 				sprintf(buffer, "%d", distance);
-				ILI9341_Puts((uint16_t)(x + strLenghtDistance), (uint16_t)(y * 2), buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+				ILI9341_Puts((uint16_t)(x + strLenghtDistance), y2, buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 
                 state = SCANNING_ENVIRONNEMENT;
             }

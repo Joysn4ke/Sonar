@@ -51,13 +51,6 @@ typedef struct {
 
 
 //Formes �cran
-// static Quadrilateral static_quadrilateral = {
-// 		SCREEN_CENTER_X,
-// 		SCREEN_CENTER_Y,
-// 		SCREEN_CENTER_X+SCREEN_CENTER_X/2,
-// 		SCREEN_CENTER_Y+SCREEN_CENTER_Y/2
-// };
-
 static Quadrilateral static_quadrilateral = {
 		SCREEN_WIDTH - 50,
 		SCREEN_LENGTH - 50,

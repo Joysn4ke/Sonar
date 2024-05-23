@@ -156,7 +156,7 @@ void HCSR04_state_machine(void)
 	}
 }
 
-
+/*
 void HCSR04_demo_state_machine(void)
 {
 	typedef enum
@@ -230,6 +230,8 @@ void HCSR04_demo_state_machine(void)
 			break;
 	}
 }
+*/
+
 
 /*
  * @pre	il ne peut pas y avoir plusieurs capteurs sur un même numéro de broche (par exemple PA0 et PB0 !)

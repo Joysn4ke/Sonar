@@ -13,7 +13,6 @@ extern Quadrilateral static_quadrilateral;
 extern Circle closeButton;
 
 
-
 void Screen_init(void){
 	ILI9341_Init();
 	XPT2046_init();
@@ -55,11 +54,9 @@ bool_e isClickedOnRectangle(uint16_t click_x, uint16_t click_y, uint16_t rect_x1
 
 
 bool_e isClickedOnCircle(uint16_t click_x, uint16_t click_y, uint16_t circle_x, uint16_t circle_y, uint16_t radius) {
-    //int16_t distance_squared = (click_x - circle_x) * (click_x - circle_x) + (click_y - circle_y) * (click_y - circle_y);	// Calculer la distance entre les coordonn�es du clic et le centre du cercle
     float distance_squared = sqrt(pow(click_x - circle_x, 2) + pow(click_y - circle_y, 2));
 
     // V�rifier si la distance est inf�rieure ou �gale au rayon du cercle au carr�
-    //if (distance_squared <= radius * radius) {
     if (distance_squared <= (float)radius ) {
         return TRUE; // Le clic est � l'int�rieur du cercle
     } else {
@@ -81,10 +78,6 @@ void DrawQuadrilateralWithText(Quadrilateral quadrilatere_local, const char *str
 
 
 void DrawMenu(void){
-	//Code temporaire
-	//DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_BLACK);		// Dessiner le quadrilat�re
-	//Code temporaire
-
 	// uint16_t x1 = 70;
 	// uint16_t y1 = 70;
 	// uint16_t x2 = 230;
@@ -117,10 +110,6 @@ void DrawMenu(void){
 
 
 void HideMenu(void){
-	//Code temporaire
-	DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_BLACK);		// Dessiner le quadrilat�re
-	//Code temporaire
-
 	// uint16_t x1 = 70;
 	// uint16_t y1 = 70;
 	// uint16_t x2 = 230;
@@ -144,9 +133,6 @@ void HideMenu(void){
 
 
 bool_e scanning_enable(void) {
-
-	//printf("PRINT SCANNING ENABLE \n");
-
 	static uint16_t static_x,static_y;
 	uint16_t x, y;
 
@@ -163,21 +149,10 @@ bool_e scanning_enable(void) {
 		//ILI9341_DrawCircle(static_x, static_y, 15,ILI9341_COLOR_WHITE);
 		//ILI9341_DrawCircle(x, y, 15, ILI9341_COLOR_BLUE);
 
-
-		//ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
-		//ILI9341_DrawFilledRectangle(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10) + string_length("Scanne environnement", &Font_7x10), closeButton.centerY + TEXT_HEIGHT_7_10, ILI9341_COLOR_WHITE);
-		//ILI9341_Puts(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10 + string_length("Current state : ", &Font_7x10), closeButton.centerY, "Clicked", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
-
 		static_x = x;
 		static_y = y;
 
-
-		//if(isClickedOnRectangle(static_x, static_y, static_quadrilateral.x1, static_quadrilateral.y1, static_quadrilateral.x2, static_quadrilateral.y2)) {
 		if(isClickedOnRectangle(static_x, static_y, x1, y1, x2, y2)) {	
-			//code temporaire
-			//DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_WHITE);		// Supprimer le quadrilat�re
-			//code temporaire
-
 			return TRUE;
 		}
 		else{
@@ -194,7 +169,7 @@ bool_e scanning_enable(void) {
 
 void print_screen_current_state_init(uint16_t x_pos, uint16_t y_pos) {
 	ILI9341_Puts(x_pos, 								y_pos, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
-	ILI9341_Puts(x_pos + TEXT_LENGTH_CURRENT_STATE_7_10, y_pos, "None", &Font_7x10, ILI9341_COLOR_RED, ILI9341_COLOR_WHITE);
+	ILI9341_Puts(x_pos + TEXT_LENGTH_CURRENT_STATE_7_10, y_pos, "Init", &Font_7x10, ILI9341_COLOR_RED, ILI9341_COLOR_WHITE);
 }
 
 

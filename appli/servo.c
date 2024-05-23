@@ -15,7 +15,7 @@
 static uint16_t current_position;
 
 void SERVO_init(void){
-    //initialisation et lancement du timer1 Ã  une pÃ©riode de 10 ms
+    //initialisation et lancement du timer1 ï¿½  une pÃ©riode de 10 ms
     TIMER_run_us(TIMER1_ID, PERIOD_TIMER*1000, FALSE); //10000us = 10ms
     //activation du signal PWM sur le canal 1 du timer 1 (broche PA8)
 
@@ -31,20 +31,22 @@ void SERVO_set_position(uint16_t position) {
     current_position = position;
     uint16_t servopos;
     TIMER_run_us(TIMER1_ID,10000,FALSE);
-    //TIMER_set_duty(TIMER1_ID, TIM_CHANNEL_3, position+100);
 
     TIMER_set_duty(TIMER1_ID, TIM_CHANNEL_1, position+100);
-    //HAL_Delay(300);
-    HAL_Delay(150);
+
+    HAL_Delay(25);
 }
 
 static uint16_t position = 0;
 
 void SERVO_rotation(void) {
-    //static uint16_t position = 0;
-    static bool_e rotation = TRUE; // Initialisation à true par défaut
-    rotation = (position >= 180 || position < 0) ? !rotation : rotation; // Inverser rotation si la position est 0 ou 180
-    position = (rotation) ? (position + 10) : (position - 10); // Incrémenter ou décrémenter position en fonction de rotation
+    static bool_e rotation = TRUE; // Initialisation ï¿½ true par dï¿½faut
+
+    rotation = (position >= 180) ? !rotation : rotation;            // Inverser rotation si la position est 0 ou 180
+    position = (rotation) ? (position + 10) : (position - 10);      // Incrï¿½menter ou dï¿½crï¿½menter position en fonction de rotation
+
+    position = (position < 0) ? (0) : (position);                   // Reset position pour Ã©viter overflow
+
     SERVO_set_position(position);
 
     HAL_Delay(10); //anti-rebond "de fortune" en cadencant la lecture du bouton
@@ -55,16 +57,3 @@ uint16_t getPosition(void){
 }
 
 
-/*
-void SERVO_rotation(void)
-{
-    static uint16_t position = 0;
-    static bool_e rotation = !rotation;
-    //position = (position > 180)?0:(position+10); //de 0 à 100%, par pas de 1%
-    position = (position > 180) ? 0 :(position+10); //de 0 à 100%, par pas de 1%
-
-    SERVO_set_position(position);
-
-    HAL_Delay(10); //anti-rebond "de fortune" en cadencant la lecture du bouton
-}
-*/
