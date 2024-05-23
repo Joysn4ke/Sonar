@@ -1,6 +1,4 @@
-main.c:52:6:writeLED	16	static
-main.c:61:8:readButton	8	static
-main.c:68:6:process_ms	4	static
-main.c:77:5:main	16	static
-main.c:123:13:state_machine	112	static
-main.c:285:6:isClicked	40	static
+main.c:30:6:process_ms	4	static
+main.c:47:5:main	16	static
+main.c:109:13:state_machine	96	static
+main.c:278:6:isClicked	40	static

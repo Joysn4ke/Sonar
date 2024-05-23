@@ -29,7 +29,8 @@ appli/main.o: ../appli/main.c ../lib/hal/inc/stm32f1xx_hal.h \
  ../lib/bsp/tft_ili9341/stm32f1_ili9341.h \
  ../lib/bsp/tft_ili9341/stm32f1_fonts.h ../lib/bsp/stm32f1_timer.h \
  ../lib/bsp/stm32f1_adc.h ../lib/bsp/HC-SR04/HCSR04.h ../appli/ecran.h \
- ../lib/bsp/tft_ili9341/stm32f1_xpt2046.h ../appli/servo.h
+ ../lib/bsp/tft_ili9341/stm32f1_xpt2046.h ../appli/button.h \
+ ../appli/servo.h
 
 ../lib/hal/inc/stm32f1xx_hal.h:
 
@@ -148,5 +149,7 @@ appli/main.o: ../appli/main.c ../lib/hal/inc/stm32f1xx_hal.h \
 ../appli/ecran.h:
 
 ../lib/bsp/tft_ili9341/stm32f1_xpt2046.h:
+
+../appli/button.h:
 
 ../appli/servo.h:

@@ -20,6 +20,10 @@ static void LED_process_ms(void);
 static volatile led_state_e led_state;
 static volatile uint32_t t = 0;
 
+void writeLED(bool_e b) {
+	HAL_GPIO_WritePin(LED_GREEN_GPIO, LED_GREEN_PIN, b);
+}
+
 void LED_init(void)
 {
 	//Initialisation du port de la led Verte  en sortie Push-Pull

@@ -8,12 +8,16 @@
 #ifndef BUTTON_H_
 #define BUTTON_H_
 
+#define bool_e int
+
 typedef enum
 {
 	BUTTON_EVENT_NONE,
 	BUTTON_EVENT_SHORT_PRESS,
 	BUTTON_EVENT_LONG_PRESS
 }button_event_e;
+
+bool_e readButton(void);
 
 void BUTTON_init(void);
 

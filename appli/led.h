@@ -16,6 +16,7 @@ typedef enum
 	LED_FLASH
 }led_state_e;
 
+void writeLED(bool_e b);
 
 void LED_init(void);
 

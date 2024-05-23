@@ -18,6 +18,10 @@ static volatile bool_e flag_10ms;
 static volatile uint32_t t = 0;
 static bool_e initialized = FALSE;
 
+bool_e readButton(void) {
+	return !HAL_GPIO_ReadPin(BLUE_BUTTON_GPIO, BLUE_BUTTON_PIN);
+}
+
 void BUTTON_init(void)
 {
 	//Initialisation du port du bouton bleu en entrée
