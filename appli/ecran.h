@@ -51,14 +51,6 @@ typedef struct {
 
 
 //Formes �cran
-static Quadrilateral static_quadrilateral = {
-		SCREEN_WIDTH - 50,
-		SCREEN_LENGTH - 50,
-		SCREEN_WIDTH,
-		SCREEN_LENGTH
-};
-
-
 static Circle closeButton = {30, 30, 20};
 
 

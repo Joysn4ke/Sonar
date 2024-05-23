@@ -42,10 +42,16 @@ static uint16_t position = 0;
 void SERVO_rotation(void) {
     static bool_e rotation = TRUE; // Initialisation ï¿½ true par dï¿½faut
 
-    rotation = (position >= 180) ? !rotation : rotation;            // Inverser rotation si la position est 0 ou 180
-    position = (rotation) ? (position + 10) : (position - 10);      // Incrï¿½menter ou dï¿½crï¿½menter position en fonction de rotation
+    rotation = (position >= 170) ? !rotation : rotation;
 
-    position = (position < 0) ? (0) : (position);                   // Reset position pour Ã©viter overflow
+    if (rotation) {										//Test pour éviter de faire position - 10 < 0
+		position = position + 10;
+    } else if(position - 10 > 0) {
+    	position = position - 10;
+    } else {
+    	position = 0;
+    	rotation = !rotation;
+    }
 
     SERVO_set_position(position);
 

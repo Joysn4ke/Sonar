@@ -294,19 +294,9 @@ void isClicked(void) {
 		static_y = (uint16_t)y;
 
 		if(isClickedOnRectangle(static_x, static_y, x1, y1, x2, y2)) {	
-
-			//code temporaire
-			DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_WHITE);		// Supprimer le quadrilat�re
-			//code temporaire
-
 			state = PAUSE;
 		}
 		else if(isClickedOnCircle(static_x, static_y, closeButton.centerX, closeButton.centerY, closeButton.radius)) {
-
-			//code temporaire
-			DrawQuadrilateral(static_quadrilateral, ILI9341_COLOR_BLACK);		// Dessiner le quadrilat�re
-			//code temporaire
-
 			state = MENU_CHOICE;
 		}
 	}
