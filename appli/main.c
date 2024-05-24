@@ -17,10 +17,12 @@
 
 #include "HC-SR04/HCSR04.h"
 
+
 //Include fichiers projet
 #include "ecran.h"
 #include "button.h"
 #include "servo.h"
+
 
 
 static void state_machine(void);
@@ -34,6 +36,7 @@ void process_ms(void)
 
 }
 
+extern int16_t pointsAngle[15][2];
 
 static uint16_t strLenghtState = 112;					//uint16_t strLenghtState = string_length("Current state : ", &Font_7x10);
 static uint16_t strLenghtPosMot = 126; 					//uint16_t strLenghtPosMot = string_length("Position moteur : ", &Font_7x10);
@@ -72,7 +75,6 @@ int main(void)
 	Screen_init();
 	SERVO_init();
 	BUTTON_init();
-
 
 	while(1)	//boucle de tache de fond
 	{
@@ -155,6 +157,8 @@ static void state_machine(void)
             {
                 state = SCANNING_ENVIRONNEMENT;
                 HideMenu();
+                //DrawHalfCircle(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_BLACK);
+                DrawSonar(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_BLACK);
             }
             break;
 
@@ -216,7 +220,7 @@ static void state_machine(void)
 			//###########################################################
 			//############## !!!!!!!! A SUPPRIMER !!!!!!!! ##############
 			//###########################################################
-			distance = 2000;
+			distance = (uint16_t)((current_time % 4000) + 1);
 			//###########################################################
 			//###########################################################
 			//###########################################################

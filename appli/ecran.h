@@ -9,6 +9,8 @@
 #include "stm32f1_xpt2046.h"
 #include <math.h>
 
+#define PI 3.14159265
+
 #ifndef ECRAN_H_
 #define ECRAN_H_
 
@@ -32,7 +34,6 @@
 #define DISPLAY_REFRESH_INTERVAL 250			// D�clarer une variable pour stocker l'intervalle de rafra�chissement de l'affichage (en millisecondes)
 
 static uint32_t last_display_time = 0;			// D�clarer une variable statique pour stocker le temps du dernier affichage
-
 
 
 typedef struct {
@@ -62,13 +63,12 @@ void print_screen_current_state_init(uint16_t x_pos, uint16_t y_pos);
 
 
 void drawCloseButton(void);
-void DrawQuadrilateral(Quadrilateral quadrilatere_local, uint16_t color);
-void DrawQuadrilateralWithText(Quadrilateral quadrilatere_local, const char *string);
-void DrawCircle(Circle cercle_local);
+void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color);
 
 void DrawMenu(void);
 void HideMenu(void);
 
+void DrawSonar(int16_t x0, int16_t y0, int16_t r, uint16_t color);
 
 bool_e scanning_enable(void);
 
