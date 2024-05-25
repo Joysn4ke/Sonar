@@ -18,23 +18,24 @@ void Screen_init(void){
 	ILI9341_Init();
 	XPT2046_init();
 
-	ILI9341_Fill(ILI9341_COLOR_WHITE);					 //Back Color
+	ILI9341_Fill(ILI9341_COLOR_BLACK);					 //Back Color
 	ILI9341_Rotate(ILI9341_Orientation_Landscape_1);	 //Screen Orientation LandScape
 
 
 	//A SUPPRIMER
-	DrawSonar(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_BLACK);
+	//DrawSonar(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_BLACK);
 	//A SUPPRIMER
 
-	drawCloseButton();
+
+	DrawCloseButton();
 
 	DrawMenu();
 
-	print_screen_current_state_init(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY);
+	printScreenCurrentStateInit(closeButton.centerX + closeButton.radius + TEXT_GAP_7_10, closeButton.centerY);
 }
 
 
-void drawCloseButton(void) {
+void DrawCloseButton(void) {
     ILI9341_DrawFilledCircle(closeButton.centerX, closeButton.centerY, closeButton.radius, ILI9341_COLOR_RED);
 
     // Dessiner une croix blanche pour indiquer la fermeture
@@ -117,11 +118,11 @@ void HideMenu(void){
 	uint16_t delta1 = 2;
 	uint16_t delta2 = y2 - y1 + 15;
 
-	ILI9341_INT_Fill(x1, y1, x2, y2, ILI9341_COLOR_WHITE);
-	ILI9341_INT_Fill(x1 + delta1, y1 + delta1, x2 - delta1, y2 - delta1, ILI9341_COLOR_WHITE);
+	ILI9341_INT_Fill(x1, y1, x2, y2, ILI9341_COLOR_BLACK);
+	ILI9341_INT_Fill(x1 + delta1, y1 + delta1, x2 - delta1, y2 - delta1, ILI9341_COLOR_BLACK);
 
-	ILI9341_INT_Fill(x1, y1 + delta2, x2, y2 + delta2, ILI9341_COLOR_WHITE);
-	ILI9341_INT_Fill(x1 + delta1, y1 + delta1 + delta2, x2 - delta1, y2 - delta1 + delta2, ILI9341_COLOR_WHITE);
+	ILI9341_INT_Fill(x1, y1 + delta2, x2, y2 + delta2, ILI9341_COLOR_BLACK);
+	ILI9341_INT_Fill(x1 + delta1, y1 + delta1 + delta2, x2 - delta1, y2 - delta1 + delta2, ILI9341_COLOR_BLACK);
 }
 
 
@@ -140,7 +141,7 @@ bool_e scanning_enable(void) {
 
 	if(XPT2046_getMedianCoordinates(&x, &y, XPT2046_COORDINATE_SCREEN_RELATIVE))
 	{
-		//ILI9341_DrawCircle(static_x, static_y, 15,ILI9341_COLOR_WHITE);
+		//ILI9341_DrawCircle(static_x, static_y, 15,ILI9341_COLOR_BLACK);
 		//ILI9341_DrawCircle(x, y, 15, ILI9341_COLOR_BLUE);
 
 		static_x = x;
@@ -161,10 +162,16 @@ bool_e scanning_enable(void) {
 
 
 
-void print_screen_current_state_init(uint16_t x_pos, uint16_t y_pos) {
-	ILI9341_Puts(x_pos, 								y_pos, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
-	ILI9341_Puts(x_pos + TEXT_LENGTH_CURRENT_STATE_7_10, y_pos, "Init", &Font_7x10, ILI9341_COLOR_RED, ILI9341_COLOR_WHITE);
+void printScreenCurrentStateInit(uint16_t x_pos, uint16_t y_pos) {
+	ILI9341_Puts(x_pos, 								y_pos, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);
+	ILI9341_Puts(x_pos + TEXT_LENGTH_CURRENT_STATE_7_10, y_pos, "Init", &Font_7x10, ILI9341_COLOR_RED, ILI9341_COLOR_BLACK);
 }
+
+// void printScreenCurrentState(uint16_t x_pos, uint16_t y_pos, char *str, uint16_t strLengthGap){
+// 	ILI9341_Puts(x_pos, y_pos, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
+// 	ILI9341_Puts(x_pos, y_pos, "AAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
+// 	ILI9341_Puts(x_pos, y_pos, &str, &Font_7x10, ILI9341_COLOR_GREEN, ILI9341_COLOR_BLACK);
+// }
 
 
 /**
@@ -214,23 +221,56 @@ void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color) {
 
 void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color) {
     // Dessiner le demi-cercle
-    for (int i = 0; i <= 180; i++) {
-        int x = centerX - round(radius * cos(M_PI * i / 180));
-        int y = centerY - round(radius * sin(M_PI * i / 180));
+    //for (int i = 0; i <= 180; i++) {
+	for (int i = 15; i <= 165; i++) {
+		int x = centerX - round(radius / 1.75 * cos(M_PI * i / 180));
+		int y = centerY - round(radius / 1.75 * sin(M_PI * i / 180));
+		ILI9341_DrawPixel(x, y, color);
+
+		x = centerX - round(radius / 2.25 * cos(M_PI * i / 180));
+		y = centerY - round(radius / 2.25 * sin(M_PI * i / 180));
+		ILI9341_DrawPixel(x, y, color);
+
+		x = centerX - round(radius / 1.25 * cos(M_PI * i / 180));
+		y = centerY - round(radius / 1.25 * sin(M_PI * i / 180));
+		ILI9341_DrawPixel(x, y, color);
+
+        x = centerX - round(radius * cos(M_PI * i / 180));
+        y = centerY - round(radius * sin(M_PI * i / 180));
         ILI9341_DrawPixel(x, y, color);
-    }
 
-    // Dessiner les lignes et afficher les angles
-    for (int i = 0; i <= 180; i += 15) {
-        int x_end = centerX - round(radius * cos(M_PI * i / 180));
-        int y_end = centerY - round(radius * sin(M_PI * i / 180));
-        ILI9341_DrawLine(centerX, centerY, x_end, y_end, color);
-        char angle[4];
-        sprintf(angle, "%d°", i);
-        ILI9341_Puts(x_end, y_end, angle, &Font_7x10, color, ILI9341_COLOR_WHITE);
+        if(i % 15 == 0){
+        	ILI9341_DrawLine(centerX, centerY, x, y, color);
+			char angle[10];
+			sprintf(angle, "%d'", i);
 
-        pointsAngle[i / 15][0] = x_end;
-        pointsAngle[i / 15][1] = y_end;
+			// Adjust the position for the text to be outside the half-circle
+			uint16_t text_x = x;
+			uint16_t text_y = y;
+
+			// Determine the position based on the angle
+			if (i < 45) {
+				text_x -= TEXT_GAP_7_10 * 3.1;        // Center horizontally
+				text_y -= TEXT_HEIGHT_7_10 / 1.3;         // Move up to ensure it is outside the circle
+			} else if (i < 90) {
+				text_x -= TEXT_GAP_7_10 * 2;        // Center horizontally
+				text_y -= TEXT_HEIGHT_7_10 * 1.5;   // Move up to ensure it is outside the circle
+			} else if (i == 90) {
+				text_x -= TEXT_GAP_7_10 / 2;        // Center horizontally
+				text_y -= TEXT_HEIGHT_7_10 * 2;     // Move up
+			} else if (i < 135) {
+				text_x -= TEXT_GAP_7_10 / 2;        // Center horizontally
+				text_y -= TEXT_HEIGHT_7_10 * 2;     // Move up
+			} else {
+				text_x += TEXT_GAP_7_10;        // Center horizontally
+				text_y -= TEXT_HEIGHT_7_10;     // Move up to ensure it is outside the circle
+			}
+
+			ILI9341_Puts(text_x, text_y, angle, &Font_7x10, color, ILI9341_COLOR_BLACK);
+
+			pointsAngle[i / 15][0] = text_x;
+			pointsAngle[i / 15][1] = text_y;
+        }
     }
 }
 

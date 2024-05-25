@@ -40,7 +40,7 @@ extern int16_t pointsAngle[15][2];
 
 static uint16_t strLenghtState = 112;					//uint16_t strLenghtState = string_length("Current state : ", &Font_7x10);
 static uint16_t strLenghtPosMot = 126; 					//uint16_t strLenghtPosMot = string_length("Position moteur : ", &Font_7x10);
-static uint16_t strLenghtDistance = 70;				//uint16_t strLenghtDistance = string_length("Distance : ", &Font_7x10);
+static uint16_t strLenghtDistance = 74;				//uint16_t strLenghtDistance = string_length("Distance : ", &Font_7x10);
 static uint16_t strLenghtScanEnv = 140;					//uint16_t strLenghtScanEnv = string_length("Scanne environnement", &Font_7x10);
 
 static uint16_t x = 30 + 20 + TEXT_GAP_7_10;		//static uint16_t x = closeButton.centerX + closeButton.radius + TEXT_GAP_7_10;
@@ -140,14 +140,14 @@ static void state_machine(void)
             {
                 //printf("[STATEMACHINE] choix menu\n");
 
-				ILI9341_Puts(x, y4, "AAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);		//Hide distance display
-				ILI9341_Puts(x, y2, "AAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);		//Hide position motor display
+				ILI9341_Puts(x, y4, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);		//Hide distance display
+				ILI9341_Puts(x, y2, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);		//Hide position motor display
 
 				DrawMenu();
 
-				ILI9341_Puts(x, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
-				ILI9341_DrawFilledRectangle((uint16_t)(x + strLenghtState), closeButton.centerY, (uint16_t)(x + strLenghtState + strLenghtScanEnv), y, ILI9341_COLOR_WHITE);
-				ILI9341_Puts((uint16_t)(x + strLenghtState), closeButton.centerY, "Choix menu", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
+				ILI9341_Puts(x, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
+				ILI9341_DrawFilledRectangle((uint16_t)(x + strLenghtState), closeButton.centerY, (uint16_t)(x + strLenghtState + strLenghtScanEnv), y, ILI9341_COLOR_BLACK);
+				ILI9341_Puts((uint16_t)(x + strLenghtState), closeButton.centerY, "Choix menu", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_BLACK);
 
 			}
 
@@ -157,17 +157,17 @@ static void state_machine(void)
             {
                 state = SCANNING_ENVIRONNEMENT;
                 HideMenu();
-                //DrawHalfCircle(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_BLACK);
-                DrawSonar(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_BLACK);
+                //DrawHalfCircle(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_WHITE);
+                DrawSonar(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_WHITE);
             }
             break;
 
         case SCANNING_ENVIRONNEMENT:
             if(entrance)
             {
-            	ILI9341_Puts(x, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
-				ILI9341_DrawFilledRectangle((uint16_t)(x + strLenghtState), closeButton.centerY, (uint16_t)(x + strLenghtState + strLenghtScanEnv), y, ILI9341_COLOR_WHITE);
-				ILI9341_Puts((uint16_t)(x + strLenghtState), closeButton.centerY, "Scanne environnement", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
+            	ILI9341_Puts(x, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
+				ILI9341_DrawFilledRectangle((uint16_t)(x + strLenghtState), closeButton.centerY, (uint16_t)(x + strLenghtState + strLenghtScanEnv), y, ILI9341_COLOR_BLACK);
+				ILI9341_Puts((uint16_t)(x + strLenghtState), closeButton.centerY, "Scanne environnement", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_BLACK);
             }
 
             //printf("[STATEMACHINE] scanne l'environnement\n");
@@ -182,14 +182,14 @@ static void state_machine(void)
 				char buffer[50];
 				//printf("Position : %d", getPosition());
 
-				ILI9341_Puts(x, y4, "Position moteur : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+				ILI9341_Puts(x, y4, "Position moteur : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
 
 				sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
-				ILI9341_Puts((uint16_t)(x + strLenghtPosMot), y4, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
+				ILI9341_Puts((uint16_t)(x + strLenghtPosMot), y4, buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);
 
 
 				sprintf(buffer, "%d", getPosition());
-				ILI9341_Puts((uint16_t)(x + strLenghtPosMot), y4, buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+				ILI9341_Puts((uint16_t)(x + strLenghtPosMot), y4, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
 
 				last_display_time = current_time; // Mettre � jour le temps du dernier affichage
 			}
@@ -242,9 +242,9 @@ static void state_machine(void)
 			if(entrance) {
 				t = 3000;
 				//t = 30;
-				ILI9341_Puts(x, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
-				ILI9341_DrawFilledRectangle((uint16_t)(x + strLenghtState), closeButton.centerY, (uint16_t)(x + strLenghtState + strLenghtScanEnv), y, ILI9341_COLOR_WHITE);
-				ILI9341_Puts((uint16_t)(x + strLenghtState), closeButton.centerY, "Pause", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_WHITE);
+				ILI9341_Puts(x, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
+				ILI9341_DrawFilledRectangle((uint16_t)(x + strLenghtState), closeButton.centerY, (uint16_t)(x + strLenghtState + strLenghtScanEnv), y, ILI9341_COLOR_BLACK);
+				ILI9341_Puts((uint16_t)(x + strLenghtState), closeButton.centerY, "Pause", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_BLACK);
 			}
 
 
@@ -260,14 +260,14 @@ static void state_machine(void)
 
             	char buffer[50];
 
-				ILI9341_Puts(x, y2, "Distance : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+				ILI9341_Puts(x, y2, "Distance : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
 
 				sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
-				ILI9341_Puts((uint16_t)(x + strLenghtDistance), y2, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_WHITE);
+				ILI9341_Puts((uint16_t)(x + strLenghtDistance), y2, buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);
 
 				//sprintf(buffer, "%d", DISTANCE_GLOBAL);
 				sprintf(buffer, "%d", distance);
-				ILI9341_Puts((uint16_t)(x + strLenghtDistance), y2, buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
+				ILI9341_Puts((uint16_t)(x + strLenghtDistance), y2, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
 
                 state = SCANNING_ENVIRONNEMENT;
             }

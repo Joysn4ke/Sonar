@@ -59,16 +59,18 @@ static Circle closeButton = {30, 30, 20};
 void Screen_init(void);
 
 
-void print_screen_current_state_init(uint16_t x_pos, uint16_t y_pos);
+void printScreenCurrentStateInit(uint16_t x_pos, uint16_t y_pos);
+// void printScreenCurrentState(uint16_t x_pos, uint16_t y_pos, uint16_t color);
 
-
-void drawCloseButton(void);
+void DrawCloseButton(void);
 void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color);
 
 void DrawMenu(void);
 void HideMenu(void);
 
 void DrawSonar(int16_t x0, int16_t y0, int16_t r, uint16_t color);
+
+
 
 bool_e scanning_enable(void);
 
