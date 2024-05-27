@@ -90,7 +90,8 @@ static Circle closeButton = {30, 30, 20};
 void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y);
 //void addEntry(TabTarget *array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y);
 void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime);
-void removeOldEntriesForced(TabTarget *array, size_t *size);
+//void removeOldEntriesForced(TabTarget *array, size_t *size);
+void removeOldEntriesForced(TabTarget **array, size_t *size);
 
 void Screen_init(void);
 

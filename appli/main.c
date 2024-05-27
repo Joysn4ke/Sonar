@@ -79,6 +79,7 @@ int main(void)
 	SERVO_init();
 	BUTTON_init();
 
+
 	while(1)	//boucle de tache de fond
 	{
 		state_machine();

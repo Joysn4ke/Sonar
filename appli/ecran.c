@@ -136,7 +136,7 @@ void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
     }
 }
 
-
+/*
 // Fonction pour supprimer les entrées plus anciennes que 1,5 sec
 void removeOldEntriesForced(TabTarget *array, size_t *size)
 {
@@ -147,8 +147,23 @@ void removeOldEntriesForced(TabTarget *array, size_t *size)
 		i++;
 	}
 	free(array);
+	*size = 0;
+	array = NULL;
 }
-
+*/
+// Fonction pour supprimer les entrées plus anciennes que 1,5 sec
+void removeOldEntriesForced(TabTarget **array, size_t *size)
+{
+	size_t i = 0;
+	while (i < *size)
+	{
+		ILI9341_DrawFilledCircle((*array)[i].x, (*array)[i].y, 3, ILI9341_COLOR_BLACK);
+		i++;
+	}
+	free(*array);
+	*size = 0;
+	*array = NULL;
+}
 
 
 void Screen_init(void)
@@ -361,7 +376,8 @@ void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 {
 	ILI9341_DrawLine(centerX, centerY, eraseX, eraseY, color);
 
-	removeOldEntriesForced(array, &size);
+	//removeOldEntriesForced(array, &size);
+	removeOldEntriesForced(&array, &size);
 
 	DrawHalfCircle(centerX, centerY, radius / 1.25, color);
 	DrawHalfCircle(centerX, centerY, radius / 1.75, color);
