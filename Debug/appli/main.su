@@ -1,4 +1,4 @@
 main.c:32:6:process_ms	4	static
-main.c:51:5:main	16	static
-main.c:112:13:state_machine	96	static
-main.c:283:6:isClicked	40	static
+main.c:55:5:main	16	static
+main.c:116:13:state_machine	88	static
+main.c:310:6:isClicked	40	static

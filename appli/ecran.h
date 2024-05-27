@@ -33,6 +33,16 @@
 
 #define DISPLAY_REFRESH_INTERVAL 250			// D�clarer une variable pour stocker l'intervalle de rafra�chissement de l'affichage (en millisecondes)
 
+static uint16_t strLenghtState = 112;					//uint16_t strLenghtState = string_length("Current state : ", &Font_7x10);
+static uint16_t strLenghtPosMot = 126; 					//uint16_t strLenghtPosMot = string_length("Position moteur : ", &Font_7x10);
+static uint16_t strLenghtDistance = 74;				//uint16_t strLenghtDistance = string_length("Distance : ", &Font_7x10);
+static uint16_t strLenghtScanEnv = 140;					//uint16_t strLenghtScanEnv = string_length("Scanne environnement", &Font_7x10);
+
+static uint16_t x = 30 + 20 + TEXT_GAP_7_10;		//static uint16_t x = closeButton.centerX + closeButton.radius + TEXT_GAP_7_10;
+static uint16_t y = 30 + TEXT_HEIGHT_7_10;			//static uint16_t y = closeButton.centerY + TEXT_HEIGHT_7_10;
+static uint16_t y2 = 30 + TEXT_HEIGHT_7_10 * 2;
+static uint16_t y4 = 30 + TEXT_HEIGHT_7_10 * 4;
+
 static uint32_t last_display_time = 0;			// D�clarer une variable statique pour stocker le temps du dernier affichage
 
 
@@ -68,9 +78,13 @@ void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color);
 void DrawMenu(void);
 void HideMenu(void);
 
-void DrawSonar(int16_t x0, int16_t y0, int16_t r, uint16_t color);
+void DrawStateChoixMenu(void);
+void DrawStateScan(void);
 
+void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color);
+void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color);
 
+void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, uint16_t position, uint16_t previousPosition);
 
 bool_e scanning_enable(void);
 

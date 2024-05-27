@@ -12,6 +12,9 @@
 #include "macro_types.h"
 
 #define PERIOD_TIMER 10 //ms
+
+static uint16_t position = 18;
+
 static uint16_t current_position;
 
 void SERVO_init(void){
@@ -37,19 +40,17 @@ void SERVO_set_position(uint16_t position) {
     //HAL_Delay(25);
 }
 
-static uint16_t position = 0;
-
 void SERVO_rotation(void) {
     static bool_e rotation = TRUE; // Initialisation ï¿½ true par dï¿½faut
 
-    rotation = (position >= 170) ? !rotation : rotation;
+    rotation = (position >= 158) ? !rotation : rotation;
 
     if (rotation) {										//Test pour éviter de faire position - 10 < 0
 		position = position + 10;
-    } else if(position - 10 > 0) {
+    } else if(position - 10 > 18) {
     	position = position - 10;
     } else {
-    	position = 0;
+    	position = 18;
     	rotation = !rotation;
     }
 
