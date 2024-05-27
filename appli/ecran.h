@@ -36,6 +36,8 @@
 
 #define DISPLAY_REFRESH_INTERVAL 250			// D�clarer une variable pour stocker l'intervalle de rafra�chissement de l'affichage (en millisecondes)
 
+#define NB_TAB_ANGLES 		15
+
 typedef struct {
 	uint16_t x1;
 	uint16_t y1;
@@ -77,8 +79,7 @@ static TabTarget *array = NULL;
 static size_t size = 0;
 static size_t capacity = 10;
 
-
-
+uint16_t pointsAngle[NB_TAB_ANGLES][2];
 
 
 //Formes �cran

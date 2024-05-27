@@ -13,9 +13,9 @@ ecran.c:242:6:DrawHalfCircle	40	static
 ecran.c:282:6:DrawSonar	64	static
 ecran.c:359:6:HideSonar	64	static
 ecran.c:398:6:DrawScanning	56	static
-ecran.c:444:6:DrawTarget	48	static
-ecran.c:478:6:PrintStateChoixMenu	24	static
-ecran.c:486:6:PrintStateScan	24	static
-ecran.c:493:6:PrintStatePause	24	static
-ecran.c:500:6:PrintDistance	80	static
-ecran.c:513:10:string_length	24	static
+ecran.c:482:6:DrawTarget	48	static
+ecran.c:515:6:PrintStateChoixMenu	24	static
+ecran.c:523:6:PrintStateScan	24	static
+ecran.c:531:6:PrintStatePause	24	static
+ecran.c:539:6:PrintDistance	80	static
+ecran.c:552:10:string_length	24	static

@@ -11,7 +11,7 @@
 
 extern Circle closeButton;
 
-int16_t pointsAngle[15][2];
+
 
 
 
@@ -415,6 +415,7 @@ void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t col
 		eraseY = tempY;
 	}
 
+	/*
 	for (int i = position - 2; i <= position + 2; i++)
 	{
 		int x = centerX - round(radius / 1.75 * cos(M_PI * i / 180));
@@ -438,6 +439,43 @@ void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t col
 			ILI9341_DrawLine(centerX, centerY, x, y, color);
 		}
 	}
+	*/
+	int x = 0;
+	int y = 0;
+
+	for(int i = 0; i <= NB_TAB_ANGLES; i++)
+	{
+		ILI9341_DrawLine(centerX, centerY, pointsAngle[i][0], pointsAngle[i][1], color);
+	}
+
+	/*
+	for (int i = 15; i <= 165; i++)
+	{
+		if(i % 15 == 0)
+		{
+			x = centerX - round(radius * cos(M_PI * i / 180));
+			y = centerY - round(radius * sin(M_PI * i / 180));
+			ILI9341_DrawLine(centerX, centerY, x, y, color);
+		}
+
+		if(i >= position - 2  && i <= position + 2)
+		{
+			ILI9341_DrawPixel(x, y, color);
+
+			x = centerX - round(radius / 1.75 * cos(M_PI * i / 180));
+			y = centerY - round(radius / 1.75 * sin(M_PI * i / 180));
+			ILI9341_DrawPixel(x, y, color);
+
+			x = centerX - round(radius / 2.75 * cos(M_PI * i / 180));
+			y = centerY - round(radius / 2.75 * sin(M_PI * i / 180));
+			ILI9341_DrawPixel(x, y, color);
+
+			x = centerX - round(radius / 1.25 * cos(M_PI * i / 180));
+			y = centerY - round(radius / 1.25 * sin(M_PI * i / 180));
+			ILI9341_DrawPixel(x, y, color);
+		}
+	}
+	*/
 }
 
 
@@ -451,7 +489,6 @@ void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_
 	static lastX = 0;
 	static lastY = 0;
 	*/
-
 
 	static uint32_t lastDisplayTime = 0;
 	uint32_t currentTime = HAL_GetTick();
@@ -490,12 +527,14 @@ void PrintStateScan(void)
 	ILI9341_Puts((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, "Scanne environnement", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_BLACK);
 }
 
+
 void PrintStatePause(void)
 {
 	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
 	ILI9341_DrawFilledRectangle((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, (uint16_t)(xOrigin + strLenghtState + strLenghtScanEnv), yOrigin, ILI9341_COLOR_BLACK);
 	ILI9341_Puts((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, "Pause", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_BLACK);
 }
+
 
 void PrintDistance(uint16_t distance)
 {

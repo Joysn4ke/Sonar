@@ -36,7 +36,7 @@ void process_ms(void)
 
 }
 
-extern int16_t pointsAngle[15][2];
+//extern uint16_t pointsAngle[15][2];
 
 /*
 extern static uint16_t strLenghtState = 112;					//uint16_t strLenghtState = string_length("Current state : ", &Font_7x10);
@@ -49,7 +49,6 @@ extern static uint16_t y = 30 + TEXT_HEIGHT_7_10;			//static uint16_t y = closeB
 extern static uint16_t y2 = 30 + TEXT_HEIGHT_7_10 * 2;
 extern static uint16_t y4 = 30 + TEXT_HEIGHT_7_10 * 4;
 */
-
 
 
 int main(void)
