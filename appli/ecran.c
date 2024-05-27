@@ -85,7 +85,7 @@ bool_e scanning_enable(void)
 	}
 }
 
-
+/*
 // Fonction pour ajouter une nouvelle entrée au tableau dynamique
 void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y)
 {
@@ -99,6 +99,22 @@ void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, 
     (*array)[*size].y = y;
     (*size)++;
 }
+*/
+
+// Fonction pour ajouter une nouvelle entrée au tableau dynamique
+void addEntry(TabTarget *array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y)
+{
+    if (*size >= *capacity)
+    {
+        *capacity *= 2;
+        array = realloc(array, *capacity * sizeof(TabTarget));
+    }
+    array[*size].time = time;
+    array[*size].x = x;
+    array[*size].y = y;
+    (*size)++;
+}
+
 
 // Fonction pour supprimer les entrées plus anciennes que 1,5 sec
 void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
@@ -123,14 +139,13 @@ void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
 // Fonction pour supprimer les entrées plus anciennes que 1,5 sec
 void removeOldEntriesForced(TabTarget *array, size_t *size)
 {
-    size_t i = 0;
-    while (i < *size)
-    {
+	size_t i = 0;
+	while (i < *size)
+	{
 		ILI9341_DrawFilledCircle(array[i].x, array[i].y, 3, ILI9341_COLOR_BLACK);
-		memmove(&array[i], &array[i + 1], (*size - i - 1) * sizeof(TabTarget));
-		(*size)--;
 		i++;
-    }
+	}
+	free(array);
 }
 
 
@@ -174,11 +189,6 @@ void DrawCloseButton(void)
 
 void DrawMenu(void)
 {
-	// uint16_t x1 = 70;
-	// uint16_t y1 = 70;
-	// uint16_t x2 = 230;
-	// uint16_t y2 = 110;
-
 	uint16_t x1 = SCREEN_WIDTH/4;
 	uint16_t y1 = SCREEN_LENGTH/4;
 	uint16_t x2 = SCREEN_WIDTH - SCREEN_WIDTH/4;
@@ -208,11 +218,6 @@ void DrawMenu(void)
 
 void HideMenu(void)
 {
-	// uint16_t x1 = 70;
-	// uint16_t y1 = 70;
-	// uint16_t x2 = 230;
-	// uint16_t y2 = 110;
-
 	uint16_t x1 = SCREEN_WIDTH/4;
 	uint16_t y1 = SCREEN_LENGTH/4;
 	uint16_t x2 = SCREEN_WIDTH - SCREEN_WIDTH/4;
@@ -311,6 +316,9 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 			uint16_t text_x = x;
 			uint16_t text_y = y;
 
+			pointsAngle[i / 15][0] = x;
+			pointsAngle[i / 15][1] = y;
+
 			// Determine the position based on the angle
 			if (i < 45)
 			{
@@ -338,18 +346,10 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 				text_y -= TEXT_HEIGHT_7_10;     // Move up to ensure it is outside the circle
 			}
 
-			/*
-			if(color == ILI9341_COLOR_BLACK){
-				ILI9341_Puts(text_x, text_y, angle, &Font_7x10, color, ILI9341_COLOR_WHITE);
-			} else if (color == ILI9341_COLOR_WHITE) {
-				ILI9341_Puts(text_x, text_y, angle, &Font_7x10, color, ILI9341_COLOR_BLACK);
-			}
-			*/
+			pointsAngleText[i / 15][0] = text_x;
+			pointsAngleText[i / 15][1] = text_y;
 
 			ILI9341_Puts(text_x, text_y, angle, &Font_7x10, color, ILI9341_COLOR_BLACK);
-
-			pointsAngle[i / 15][0] = text_x;
-			pointsAngle[i / 15][1] = text_y;
         }
     }
 }
@@ -390,7 +390,8 @@ void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
         	char angle[10];
 			sprintf(angle, "%d'", i);
 
-			ILI9341_Puts(pointsAngle[i / 15][0], pointsAngle[i / 15][1], angle, &Font_7x10, color, color);
+			//ILI9341_Puts(pointsAngle[i / 15][0], pointsAngle[i / 15][1], angle, &Font_7x10, color, color);
+			ILI9341_Puts(pointsAngleText[i / 15][0], pointsAngleText[i / 15][1], angle, &Font_7x10, color, color);
         }
     }
 }
@@ -415,7 +416,7 @@ void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t col
 		eraseY = tempY;
 	}
 
-	/*
+	/**/
 	for (int i = position - 2; i <= position + 2; i++)
 	{
 		int x = centerX - round(radius / 1.75 * cos(M_PI * i / 180));
@@ -439,56 +440,18 @@ void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t col
 			ILI9341_DrawLine(centerX, centerY, x, y, color);
 		}
 	}
-	*/
-	int x = 0;
-	int y = 0;
 
-	for(int i = 0; i <= NB_TAB_ANGLES; i++)
-	{
-		ILI9341_DrawLine(centerX, centerY, pointsAngle[i][0], pointsAngle[i][1], color);
-	}
-
-	/*
-	for (int i = 15; i <= 165; i++)
-	{
-		if(i % 15 == 0)
-		{
-			x = centerX - round(radius * cos(M_PI * i / 180));
-			y = centerY - round(radius * sin(M_PI * i / 180));
-			ILI9341_DrawLine(centerX, centerY, x, y, color);
-		}
-
-		if(i >= position - 2  && i <= position + 2)
-		{
-			ILI9341_DrawPixel(x, y, color);
-
-			x = centerX - round(radius / 1.75 * cos(M_PI * i / 180));
-			y = centerY - round(radius / 1.75 * sin(M_PI * i / 180));
-			ILI9341_DrawPixel(x, y, color);
-
-			x = centerX - round(radius / 2.75 * cos(M_PI * i / 180));
-			y = centerY - round(radius / 2.75 * sin(M_PI * i / 180));
-			ILI9341_DrawPixel(x, y, color);
-
-			x = centerX - round(radius / 1.25 * cos(M_PI * i / 180));
-			y = centerY - round(radius / 1.25 * sin(M_PI * i / 180));
-			ILI9341_DrawPixel(x, y, color);
-		}
-	}
-	*/
+	uint16_t indice = round(position / 15);
+	ILI9341_DrawLine(centerX, centerY, pointsAngle[indice][0], pointsAngle[indice][1], color);
 }
 
 
 void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_t positionServo)
 {
-	if (array == NULL) {
+	if (array == NULL)
+	{
 		array = malloc(capacity * sizeof(TabTarget));
 	}
-
-	/*
-	static lastX = 0;
-	static lastY = 0;
-	*/
 
 	static uint32_t lastDisplayTime = 0;
 	uint32_t currentTime = HAL_GetTick();
@@ -500,13 +463,13 @@ void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_
 		int16_t tempY = centerY - round(distanceHCSR04 * sin(M_PI * positionServo / 180));
 
 		// Ajouter les nouvelles coordonnées et le temps actuel au tableau
-		addEntry(&array, &size, &capacity, currentTime, tempX, tempY);
+		//addEntry(&array, &size, &capacity, currentTime, tempX, tempY);
+		addEntry(array, &size, &capacity, currentTime, tempX, tempY);
+
+		ILI9341_DrawFilledCircle(tempX, tempY, 3, ILI9341_COLOR_RED);
 
 		// Supprimer les anciennes entrées
 		removeOldEntries(array, &size, currentTime);
-
-
-		ILI9341_DrawFilledCircle(tempX, tempY, 3, ILI9341_COLOR_RED);
 	}
 }
 

@@ -72,7 +72,7 @@ int main(void)
 	BSP_GPIO_PinCfg(BLUE_BUTTON_GPIO, BLUE_BUTTON_PIN, GPIO_MODE_INPUT,GPIO_PULLUP,GPIO_SPEED_FREQ_HIGH);
 
 	//On ajoute la fonction process_ms  la liste des fonctions appel es automatiquement chaque ms par la routine d'interruption du p riph rique SYSTICK
-	//Systick_add_callback_function(&process_ms);
+	Systick_add_callback_function(&process_ms);
 
 
 	Screen_init();
@@ -122,7 +122,7 @@ static void state_machine(void)
     switch(state)
     {
         case INIT:
-            //Systick_add_callback_function(&process_ms);
+            Systick_add_callback_function(&process_ms);
             state = MENU_CHOICE;
             break;
 
@@ -184,20 +184,18 @@ static void state_machine(void)
 
 
 				////////////////////////////////
-				/////// A SUPPRIMER ////////////
+				/////// A COMMENTER ////////////
 				////////////////////////////////
 				ILI9341_Puts(xOrigin, yOrigin4, "Position moteur : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
 
 				sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
 				ILI9341_Puts((uint16_t)(xOrigin + strLenghtPosMot), yOrigin4, buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);
-				////////////////////////////////
-				/////// A SUPPRIMER ////////////
-				////////////////////////////////
-
 
 				sprintf(buffer, "%d", positionParam);
 				ILI9341_Puts((uint16_t)(xOrigin + strLenghtPosMot), yOrigin4, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
-
+				////////////////////////////////
+				/////// A COMMENTER ////////////
+				////////////////////////////////
 
 				last_display_time = current_time; // Mettre � jour le temps du dernier affichage
 			}
@@ -210,6 +208,7 @@ static void state_machine(void)
 			//###########################################################
 			//############## !!!!!!!! A SUPPRIMER !!!!!!!! ##############
 			//###########################################################
+			//distance = 0;
 			distance = (uint16_t)((current_time % 4000) + 1);
 			//###########################################################
 			//###########################################################
