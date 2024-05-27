@@ -85,7 +85,7 @@ bool_e scanning_enable(void)
 	}
 }
 
-/*
+
 // Fonction pour ajouter une nouvelle entrée au tableau dynamique
 void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y)
 {
@@ -99,8 +99,9 @@ void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, 
     (*array)[*size].y = y;
     (*size)++;
 }
-*/
 
+
+/*
 // Fonction pour ajouter une nouvelle entrée au tableau dynamique
 void addEntry(TabTarget *array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y)
 {
@@ -114,7 +115,7 @@ void addEntry(TabTarget *array, size_t *size, size_t *capacity, uint32_t time, i
     array[*size].y = y;
     (*size)++;
 }
-
+*/
 
 // Fonction pour supprimer les entrées plus anciennes que 1,5 sec
 void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
@@ -463,8 +464,8 @@ void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_
 		int16_t tempY = centerY - round(distanceHCSR04 * sin(M_PI * positionServo / 180));
 
 		// Ajouter les nouvelles coordonnées et le temps actuel au tableau
-		//addEntry(&array, &size, &capacity, currentTime, tempX, tempY);
-		addEntry(array, &size, &capacity, currentTime, tempX, tempY);
+		addEntry(&array, &size, &capacity, currentTime, tempX, tempY);
+		//addEntry(array, &size, &capacity, currentTime, tempX, tempY);
 
 		ILI9341_DrawFilledCircle(tempX, tempY, 3, ILI9341_COLOR_RED);
 
