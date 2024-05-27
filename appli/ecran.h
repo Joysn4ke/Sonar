@@ -8,6 +8,9 @@
 #include "tft_ili9341/stm32f1_ili9341.h"
 #include "stm32f1_xpt2046.h"
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 #define PI 3.14159265
 
@@ -33,19 +36,6 @@
 
 #define DISPLAY_REFRESH_INTERVAL 250			// D�clarer une variable pour stocker l'intervalle de rafra�chissement de l'affichage (en millisecondes)
 
-static uint16_t strLenghtState = 112;					//uint16_t strLenghtState = string_length("Current state : ", &Font_7x10);
-static uint16_t strLenghtPosMot = 126; 					//uint16_t strLenghtPosMot = string_length("Position moteur : ", &Font_7x10);
-static uint16_t strLenghtDistance = 74;				//uint16_t strLenghtDistance = string_length("Distance : ", &Font_7x10);
-static uint16_t strLenghtScanEnv = 140;					//uint16_t strLenghtScanEnv = string_length("Scanne environnement", &Font_7x10);
-
-static uint16_t x = 30 + 20 + TEXT_GAP_7_10;		//static uint16_t x = closeButton.centerX + closeButton.radius + TEXT_GAP_7_10;
-static uint16_t y = 30 + TEXT_HEIGHT_7_10;			//static uint16_t y = closeButton.centerY + TEXT_HEIGHT_7_10;
-static uint16_t y2 = 30 + TEXT_HEIGHT_7_10 * 2;
-static uint16_t y4 = 30 + TEXT_HEIGHT_7_10 * 4;
-
-static uint32_t last_display_time = 0;			// D�clarer une variable statique pour stocker le temps du dernier affichage
-
-
 typedef struct {
 	uint16_t x1;
 	uint16_t y1;
@@ -59,18 +49,49 @@ typedef struct {
 	uint16_t radius;
 } Circle;
 
+typedef struct {
+    uint32_t time;
+    uint16_t x;
+    uint16_t y;
+} TabTarget;
+
+
+static uint16_t strLenghtState = 112;					//uint16_t strLenghtState = string_length("Current state : ", &Font_7x10);
+static uint16_t strLenghtPosMot = 126; 					//uint16_t strLenghtPosMot = string_length("Position moteur : ", &Font_7x10);
+static uint16_t strLenghtDistance = 74;				//uint16_t strLenghtDistance = string_length("Distance : ", &Font_7x10);
+static uint16_t strLenghtScanEnv = 140;					//uint16_t strLenghtScanEnv = string_length("Scanne environnement", &Font_7x10);
+
+
+static uint16_t xOrigin = 30 + 20 + TEXT_GAP_7_10;		//static uint16_t x = closeButton.centerX + closeButton.radius + TEXT_GAP_7_10;
+static uint16_t yOrigin = 30 + TEXT_HEIGHT_7_10;			//static uint16_t y = closeButton.centerY + TEXT_HEIGHT_7_10;
+static uint16_t yOrigin2 = 30 + TEXT_HEIGHT_7_10 * 2;
+static uint16_t yOrigin4 = 30 + TEXT_HEIGHT_7_10 * 4;
+
+static uint32_t last_display_time = 0;			// D�clarer une variable statique pour stocker le temps du dernier affichage
+
+static uint16_t eraseX = 0;
+static uint16_t eraseY = 0;
+
+
+static TabTarget *array = NULL;
+static size_t size = 0;
+static size_t capacity = 10;
+
+
+
 
 
 //Formes �cran
 static Circle closeButton = {30, 30, 20};
 
 
+void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y);
+void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime);
+void removeOldEntriesForced(TabTarget *array, size_t *size);
 
 void Screen_init(void);
 
-
 void printScreenCurrentStateInit(uint16_t x_pos, uint16_t y_pos);
-// void printScreenCurrentState(uint16_t x_pos, uint16_t y_pos, uint16_t color);
 
 void DrawCloseButton(void);
 void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color);
@@ -78,13 +99,18 @@ void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color);
 void DrawMenu(void);
 void HideMenu(void);
 
-void DrawStateChoixMenu(void);
-void DrawStateScan(void);
+void PrintStateChoixMenu(void);
+void PrintStateScan(void);
+void PrintStatePause(void);
+
+void PrintDistance(uint16_t distance);
 
 void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color);
 void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color);
 
 void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, uint16_t position, uint16_t previousPosition);
+
+void DrawTarget(int16_t centerX, int16_t centerY, int16_t radius, int16_t position);
 
 bool_e scanning_enable(void);
 

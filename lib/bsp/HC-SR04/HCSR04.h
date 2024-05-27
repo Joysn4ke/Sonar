@@ -10,8 +10,6 @@
 #include "config.h"
 #if USE_HCSR04
 
-uint16_t DISTANCE_GLOBAL;
-
 void HCSR04_demo_state_machine(void);
 
 void HCSR04_state_machine(void);

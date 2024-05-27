@@ -132,8 +132,6 @@ void HCSR04_state_machine(void)
 				case HAL_OK:
 					//printf("sensor %d - distance : %d\n", id_sensor, distance);
 
-					DISTANCE_GLOBAL = distance;
-
 					state = WAIT_BEFORE_NEXT_MEASURE;
 					break;
 				case HAL_ERROR:
