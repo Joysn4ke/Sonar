@@ -20,10 +20,23 @@ static void LED_process_ms(void);
 static volatile led_state_e led_state;
 static volatile uint32_t t = 0;
 
+
+/**
+ * @brief  Writes a state to the green LED.
+ * @param  b: Boolean value indicating whether to turn the LED on (TRUE) or off (FALSE).
+ * @retval None
+ */
 void writeLED(bool_e b) {
 	HAL_GPIO_WritePin(LED_GREEN_GPIO, LED_GREEN_PIN, b);
 }
 
+
+/**
+ * @brief  Initializes the green LED by configuring the GPIO pin connected to the LED.
+ *         The GPIO pin is set to output mode with no pull-up or pull-down resistors and high speed.
+ *         Also sets the LED to the off state and adds the LED processing function to the system tick callback.
+ * @retval None
+ */
 void LED_init(void)
 {
 	//Initialisation du port de la led Verte  en sortie Push-Pull
@@ -33,6 +46,15 @@ void LED_init(void)
 }
 
 
+/**
+ * @brief  Sets the state of the LED.
+ * @param  state: The desired state of the LED. Can be one of the following:
+ *         - LED_OFF: Turn the LED off.
+ *         - LED_ON: Turn the LED on.
+ *         - LED_BLINK: Make the LED blink at a predefined period.
+ *         - LED_FLASH: Make the LED flash for a predefined duration.
+ * @retval None
+ */
 void LED_set(led_state_e state)
 {
 	if(led_state != state)
@@ -42,7 +64,11 @@ void LED_set(led_state_e state)
 }
 
 
-
+/**
+ * @brief  Processes the LED state and updates the LED accordingly.
+ *         This function is called periodically from the system tick handler.
+ * @retval None
+ */
 static void LED_process_ms(void)
 {
 	switch(led_state)

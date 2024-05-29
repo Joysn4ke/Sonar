@@ -14,7 +14,16 @@ extern Circle closeButton;
 
 
 
-
+/**
+ * @brief  Checks if a click is inside a rectangle
+ * @param  click_x: X coordinate of the click
+ * @param  click_y: Y coordinate of the click
+ * @param  rect_x1: X coordinate of the top-left corner of the rectangle
+ * @param  rect_y1: Y coordinate of the top-left corner of the rectangle
+ * @param  rect_x2: X coordinate of the bottom-right corner of the rectangle
+ * @param  rect_y2: Y coordinate of the bottom-right corner of the rectangle
+ * @retval TRUE if the click is inside the rectangle, FALSE otherwise
+ */
 bool_e isClickedOnRectangle(uint16_t click_x, uint16_t click_y, uint16_t rect_x1, uint16_t rect_y1, uint16_t rect_x2, uint16_t rect_y2)
 {
     // Vï¿½rifier si les coordonnï¿½es du clic sont ï¿½ l'intï¿½rieur des limites du rectangle
@@ -29,6 +38,15 @@ bool_e isClickedOnRectangle(uint16_t click_x, uint16_t click_y, uint16_t rect_x1
 }
 
 
+/**
+ * @brief  Checks if a click is inside a circle
+ * @param  click_x: X coordinate of the click
+ * @param  click_y: Y coordinate of the click
+ * @param  circle_x: X coordinate of the center of the circle
+ * @param  circle_y: Y coordinate of the center of the circle
+ * @param  radius: Radius of the circle
+ * @retval TRUE if the click is inside the circle, FALSE otherwise
+ */
 bool_e isClickedOnCircle(uint16_t click_x, uint16_t click_y, uint16_t circle_x, uint16_t circle_y, uint16_t radius)
 {
     float distance_squared = sqrt(pow(click_x - circle_x, 2) + pow(click_y - circle_y, 2));
@@ -45,6 +63,10 @@ bool_e isClickedOnCircle(uint16_t click_x, uint16_t click_y, uint16_t circle_x, 
 }
 
 
+/**
+ * @brief  Enables scanning and checks if touch input is within defined rectangles
+ * @retval TRUE if touch input is within defined rectangles, FALSE otherwise
+ */
 bool_e scanning_enable(void)
 {
 	static uint16_t static_x,static_y;
@@ -86,7 +108,16 @@ bool_e scanning_enable(void)
 }
 
 
-// Fonction pour ajouter une nouvelle entrée au tableau dynamique
+/**
+ * @brief  Adds a new entry to the dynamic array of targets
+ * @param  array: Pointer to the array of targets
+ * @param  size: Pointer to the size of the array
+ * @param  capacity: Pointer to the capacity of the array
+ * @param  time: Timestamp of the entry
+ * @param  x: X coordinate of the target
+ * @param  y: Y coordinate of the target
+ * @retval None
+ */
 void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y)
 {
     if (*size >= *capacity)
@@ -101,23 +132,15 @@ void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, 
 }
 
 
-/*
-// Fonction pour ajouter une nouvelle entrée au tableau dynamique
-void addEntry(TabTarget *array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y)
-{
-    if (*size >= *capacity)
-    {
-        *capacity *= 2;
-        array = realloc(array, *capacity * sizeof(TabTarget));
-    }
-    array[*size].time = time;
-    array[*size].x = x;
-    array[*size].y = y;
-    (*size)++;
-}
-*/
 
-// Fonction pour supprimer les entrées plus anciennes que 1,5 sec
+
+/**
+ * @brief  Removes entries older than 2.5 seconds from the dynamic array of targets
+ * @param  array: Pointer to the array of targets
+ * @param  size: Pointer to the size of the array
+ * @param  currentTime: Current timestamp
+ * @retval None
+ */
 void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
 {
     size_t i = 0;
@@ -136,22 +159,14 @@ void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
     }
 }
 
-/*
-// Fonction pour supprimer les entrées plus anciennes que 1,5 sec
-void removeOldEntriesForced(TabTarget *array, size_t *size)
-{
-	size_t i = 0;
-	while (i < *size)
-	{
-		ILI9341_DrawFilledCircle(array[i].x, array[i].y, 3, ILI9341_COLOR_BLACK);
-		i++;
-	}
-	free(array);
-	*size = 0;
-	array = NULL;
-}
-*/
-// Fonction pour supprimer les entrées plus anciennes que 1,5 sec
+
+
+/**
+ * @brief  Forces removal of all entries from the dynamic array of targets
+ * @param  array: Pointer to the pointer of the array of targets
+ * @param  size: Pointer to the size of the array
+ * @retval None
+ */
 void removeOldEntriesForced(TabTarget **array, size_t *size)
 {
 	size_t i = 0;
@@ -166,6 +181,10 @@ void removeOldEntriesForced(TabTarget **array, size_t *size)
 }
 
 
+/**
+ * @brief  Initializes the screen
+ * @retval None
+ */
 void Screen_init(void)
 {
 	ILI9341_Init();
@@ -182,6 +201,13 @@ void Screen_init(void)
 }
 
 
+
+/**
+ * @brief  Prints the initial state on the screen
+ * @param  x_pos: X coordinate to start printing
+ * @param  y_pos: Y coordinate to start printing
+ * @retval None
+ */
 void printScreenCurrentStateInit(uint16_t x_pos, uint16_t y_pos)
 {
 	ILI9341_Puts(x_pos, 								y_pos, "Current state : ", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);
@@ -190,6 +216,10 @@ void printScreenCurrentStateInit(uint16_t x_pos, uint16_t y_pos)
 
 
 
+/**
+ * @brief  Draws the close button on the screen
+ * @retval None
+ */
 void DrawCloseButton(void)
 {
     ILI9341_DrawFilledCircle(closeButton.centerX, closeButton.centerY, closeButton.radius, ILI9341_COLOR_RED);
@@ -203,6 +233,10 @@ void DrawCloseButton(void)
 
 
 
+/**
+ * @brief  Draws the menu on the screen
+ * @retval None
+ */
 void DrawMenu(void)
 {
 	uint16_t x1 = SCREEN_WIDTH/4;
@@ -231,7 +265,10 @@ void DrawMenu(void)
 }
 
 
-
+/**
+ * @brief  Hides the menu on the screen by filling the menu areas with black color
+ * @retval None
+ */
 void HideMenu(void)
 {
 	uint16_t x1 = SCREEN_WIDTH/4;
@@ -299,7 +336,14 @@ void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color)
 
 
 
-
+/**
+ * @brief  Draws a sonar-like semi-circle with radial lines and angle labels
+ * @param  centerX: The x-coordinate of the center of the semi-circle
+ * @param  centerY: The y-coordinate of the center of the semi-circle
+ * @param  radius: The radius of the semi-circle
+ * @param  color: The color of the semi-circle, lines, and text
+ * @retval None
+ */
 void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 {
     // Dessiner le demi-cercle
@@ -338,28 +382,28 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 			// Determine the position based on the angle
 			if (i < 45)
 			{
-				text_x -= TEXT_GAP_7_10 * 3.1;        // Center horizontally
-				text_y -= TEXT_HEIGHT_7_10 / 1.3;         // Move up to ensure it is outside the circle
+				text_x -= TEXT_GAP_7_10 * 3.1;
+				text_y -= TEXT_HEIGHT_7_10 / 1.3;
 			}
 			else if (i < 90)
 			{
-				text_x -= TEXT_GAP_7_10 * 2;        // Center horizontally
-				text_y -= TEXT_HEIGHT_7_10 * 1.5;   // Move up to ensure it is outside the circle
+				text_x -= TEXT_GAP_7_10 * 2;
+				text_y -= TEXT_HEIGHT_7_10 * 1.5;
 			}
 			else if (i == 90)
 			{
-				text_x -= TEXT_GAP_7_10 / 2;        // Center horizontally
-				text_y -= TEXT_HEIGHT_7_10 * 2;     // Move up
+				text_x -= TEXT_GAP_7_10 / 2;
+				text_y -= TEXT_HEIGHT_7_10 * 2;
 			}
 			else if (i < 135)
 			{
-				text_x -= TEXT_GAP_7_10 / 2;        // Center horizontally
-				text_y -= TEXT_HEIGHT_7_10 * 2;     // Move up
+				text_x -= TEXT_GAP_7_10 / 2;
+				text_y -= TEXT_HEIGHT_7_10 * 2;
 			}
 			else
 			{
-				text_x += TEXT_GAP_7_10;        // Center horizontally
-				text_y -= TEXT_HEIGHT_7_10;     // Move up to ensure it is outside the circle
+				text_x += TEXT_GAP_7_10;
+				text_y -= TEXT_HEIGHT_7_10;
 			}
 
 			pointsAngleText[i / 15][0] = text_x;
@@ -372,11 +416,18 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 
 
 
+/**
+ * @brief  Erases the sonar-like semi-circle with radial lines and angle labels
+ * @param  centerX: The x-coordinate of the center of the semi-circle
+ * @param  centerY: The y-coordinate of the center of the semi-circle
+ * @param  radius: The radius of the semi-circle
+ * @param  color: The color to use for erasing (typically the background color)
+ * @retval None
+ */
 void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 {
 	ILI9341_DrawLine(centerX, centerY, eraseX, eraseY, color);
 
-	//removeOldEntriesForced(array, &size);
 	removeOldEntriesForced(&array, &size);
 
 	DrawHalfCircle(centerX, centerY, radius / 1.25, color);
@@ -413,6 +464,19 @@ void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
     }
 }
 
+
+
+
+/**
+ * @brief  Draws a scanning line with a sonar-like effect and updates its position.
+ * @param  centerX: The x-coordinate of the center of the sonar.
+ * @param  centerY: The y-coordinate of the center of the sonar.
+ * @param  radius: The radius of the sonar.
+ * @param  color: The color to use for the scanning line.
+ * @param  position: The current angle position of the scanning line in degrees.
+ * @param  previousPosition: The previous angle position of the scanning line in degrees.
+ * @retval None
+ */
 void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, uint16_t position, uint16_t previousPosition)
 {
 	int16_t tempX;
@@ -433,7 +497,6 @@ void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t col
 		eraseY = tempY;
 	}
 
-	/**/
 	for (int i = position - 2; i <= position + 2; i++)
 	{
 		int x = centerX - round(radius / 1.75 * cos(M_PI * i / 180));
@@ -463,6 +526,16 @@ void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t col
 }
 
 
+
+/**
+ * @brief  Draws a target on the screen based on the given distance and servo position.
+ *         The function updates the target's position periodically and manages the history of target positions.
+ * @param  centerX: The x-coordinate of the center of the sonar.
+ * @param  centerY: The y-coordinate of the center of the sonar.
+ * @param  distanceHCSR04: The distance measured by the HCSR04 sensor.
+ * @param  positionServo: The angle position of the servo motor.
+ * @retval None
+ */
 void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_t positionServo)
 {
 	if (array == NULL)
@@ -492,6 +565,11 @@ void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_
 
 
 
+
+/**
+ * @brief  Displays the current state as "Choix menu" on the screen.
+ * @retval None
+ */
 void PrintStateChoixMenu(void)
 {
 	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
@@ -500,6 +578,11 @@ void PrintStateChoixMenu(void)
 }
 
 
+
+/**
+ * @brief  Displays the current state as "Scanne environnement" on the screen.
+ * @retval None
+ */
 void PrintStateScan(void)
 {
 	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
@@ -508,6 +591,11 @@ void PrintStateScan(void)
 }
 
 
+
+/**
+ * @brief  Displays the current state as "Pause" on the screen.
+ * @retval None
+ */
 void PrintStatePause(void)
 {
 	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
@@ -516,6 +604,12 @@ void PrintStatePause(void)
 }
 
 
+
+/**
+ * @brief  Displays the measured distance on the screen.
+ * @param  distance: The distance to be displayed.
+ * @retval None
+ */
 void PrintDistance(uint16_t distance)
 {
 	char buffer[50];
@@ -529,6 +623,14 @@ void PrintDistance(uint16_t distance)
 	ILI9341_Puts((uint16_t)(xOrigin + strLenghtDistance), yOrigin2, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
 }
 
+
+
+/**
+ * @brief  Calculates the length of a string in pixels based on the given font.
+ * @param  str: The string to measure.
+ * @param  font: The font definition to use for the measurement.
+ * @retval The length of the string in pixels.
+ */
 uint16_t string_length(const char *str, FontDef_t *font)
 {
     uint16_t length = 0;

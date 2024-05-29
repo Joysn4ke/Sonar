@@ -32,6 +32,7 @@ void BUTTON_init(void)
 	initialized = TRUE;
 }
 
+
 static void process_ms(void)
 {
 	static uint32_t t10ms = 0;
@@ -41,6 +42,7 @@ static void process_ms(void)
 	if(t)
 		t--;
 }
+
 
 /**
 	Cette machine à états gère la détection d'appuis sur le bouton bleu.

@@ -23,23 +23,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
   9 .ARM.attributes 00000029  00000000  00000000  00030a14  2**0
                   CONTENTS, READONLY
- 10 .debug_info   0001c3e0  00000000  00000000  00030a3d  2**0
+ 10 .debug_info   0001c3e7  00000000  00000000  00030a3d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 11 .debug_abbrev 00004bab  00000000  00000000  0004ce1d  2**0
+ 11 .debug_abbrev 00004bab  00000000  00000000  0004ce24  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 12 .debug_aranges 00001608  00000000  00000000  000519c8  2**3
+ 12 .debug_aranges 00001608  00000000  00000000  000519d0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_ranges 00001470  00000000  00000000  00052fd0  2**3
+ 13 .debug_ranges 00001470  00000000  00000000  00052fd8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_macro  0001b220  00000000  00000000  00054440  2**0
+ 14 .debug_macro  0001b220  00000000  00000000  00054448  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_line   00019778  00000000  00000000  0006f660  2**0
+ 15 .debug_line   00019779  00000000  00000000  0006f668  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_str    000840ef  00000000  00000000  00088dd8  2**0
+ 16 .debug_str    000840ef  00000000  00000000  00088de1  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .comment      00000053  00000000  00000000  0010cec7  2**0
+ 17 .comment      00000053  00000000  00000000  0010ced0  2**0
                   CONTENTS, READONLY
- 18 .debug_frame  000076b0  00000000  00000000  0010cf1c  2**2
+ 18 .debug_frame  000076b0  00000000  00000000  0010cf24  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1607,6 +1607,7 @@ void BUTTON_init(void)
 
 08001240 <process_ms>:
 
+
 static void process_ms(void)
 {
  8001240:	b480      	push	{r7}
@@ -1657,10 +1658,10 @@ static void process_ms(void)
  8001294:	20000a34 	.word	0x20000a34
 
 08001298 <isClickedOnRectangle>:
-
-
-
-
+ * @param  rect_x2: X coordinate of the bottom-right corner of the rectangle
+ * @param  rect_y2: Y coordinate of the bottom-right corner of the rectangle
+ * @retval TRUE if the click is inside the rectangle, FALSE otherwise
+ */
 bool_e isClickedOnRectangle(uint16_t click_x, uint16_t click_y, uint16_t rect_x1, uint16_t rect_y1, uint16_t rect_x2, uint16_t rect_y2)
 {
  8001298:	b490      	push	{r4, r7}
@@ -1714,8 +1715,10 @@ bool_e isClickedOnRectangle(uint16_t click_x, uint16_t click_y, uint16_t rect_x1
  80012e4:	4770      	bx	lr
 
 080012e6 <isClickedOnCircle>:
-
-
+ * @param  circle_y: Y coordinate of the center of the circle
+ * @param  radius: Radius of the circle
+ * @retval TRUE if the click is inside the circle, FALSE otherwise
+ */
 bool_e isClickedOnCircle(uint16_t click_x, uint16_t click_y, uint16_t circle_x, uint16_t circle_y, uint16_t radius)
 {
  80012e6:	b5b0      	push	{r4, r5, r7, lr}
@@ -1800,8 +1803,10 @@ bool_e isClickedOnCircle(uint16_t click_x, uint16_t click_y, uint16_t circle_x, 
 	...
 
 08001388 <scanning_enable>:
-
-
+/**
+ * @brief  Enables scanning and checks if touch input is within defined rectangles
+ * @retval TRUE if touch input is within defined rectangles, FALSE otherwise
+ */
 bool_e scanning_enable(void)
 {
  8001388:	b590      	push	{r4, r7, lr}
@@ -1920,9 +1925,10 @@ bool_e scanning_enable(void)
  8001428:	20000a4e 	.word	0x20000a4e
 
 0800142c <addEntry>:
-
-
-// Fonction pour ajouter une nouvelle entrée au tableau dynamique
+ * @param  x: X coordinate of the target
+ * @param  y: Y coordinate of the target
+ * @retval None
+ */
 void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y)
 {
  800142c:	b580      	push	{r7, lr}
@@ -1999,10 +2005,10 @@ void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, 
  80014a8:	bd80      	pop	{r7, pc}
 
 080014aa <removeOldEntries>:
-}
-*/
-
-// Fonction pour supprimer les entrées plus anciennes que 1,5 sec
+ * @param  size: Pointer to the size of the array
+ * @param  currentTime: Current timestamp
+ * @retval None
+ */
 void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
 {
  80014aa:	b580      	push	{r7, lr}
@@ -2093,10 +2099,10 @@ void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
  800153a:	bd80      	pop	{r7, pc}
 
 0800153c <removeOldEntriesForced>:
-	array = NULL;
-}
-*/
-// Fonction pour supprimer les entrées plus anciennes que 1,5 sec
+ * @param  array: Pointer to the pointer of the array of targets
+ * @param  size: Pointer to the size of the array
+ * @retval None
+ */
 void removeOldEntriesForced(TabTarget **array, size_t *size)
 {
  800153c:	b580      	push	{r7, lr}
@@ -2160,8 +2166,10 @@ void removeOldEntriesForced(TabTarget **array, size_t *size)
 	...
 
 080015a0 <Screen_init>:
-
-
+/**
+ * @brief  Initializes the screen
+ * @retval None
+ */
 void Screen_init(void)
 {
  80015a0:	b580      	push	{r7, lr}
@@ -2204,8 +2212,10 @@ void Screen_init(void)
  80015e0:	20000010 	.word	0x20000010
 
 080015e4 <printScreenCurrentStateInit>:
-
-
+ * @param  x_pos: X coordinate to start printing
+ * @param  y_pos: Y coordinate to start printing
+ * @retval None
+ */
 void printScreenCurrentStateInit(uint16_t x_pos, uint16_t y_pos)
 {
  80015e4:	b580      	push	{r7, lr}
@@ -2249,9 +2259,10 @@ void printScreenCurrentStateInit(uint16_t x_pos, uint16_t y_pos)
  8001634:	0801236c 	.word	0x0801236c
 
 08001638 <DrawCloseButton>:
-
-
-
+/**
+ * @brief  Draws the close button on the screen
+ * @retval None
+ */
 void DrawCloseButton(void)
 {
  8001638:	b590      	push	{r4, r7, lr}
@@ -2333,9 +2344,10 @@ void DrawCloseButton(void)
  80016cc:	20000010 	.word	0x20000010
 
 080016d0 <DrawMenu>:
-
-
-
+/**
+ * @brief  Draws the menu on the screen
+ * @retval None
+ */
 void DrawMenu(void)
 {
  80016d0:	b590      	push	{r4, r7, lr}
@@ -2501,9 +2513,10 @@ void DrawMenu(void)
  80017fc:	08012388 	.word	0x08012388
 
 08001800 <HideMenu>:
-
-
-
+/**
+ * @brief  Hides the menu on the screen by filling the menu areas with black color
+ * @retval None
+ */
 void HideMenu(void)
 {
  8001800:	b590      	push	{r4, r7, lr}
@@ -2795,10 +2808,10 @@ void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color)
 	...
 
 080019f0 <DrawSonar>:
-
-
-
-
+ * @param  radius: The radius of the semi-circle
+ * @param  color: The color of the semi-circle, lines, and text
+ * @retval None
+ */
 void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 {
  80019f0:	e92d 43b0 	stmdb	sp!, {r4, r5, r7, r8, r9, lr}
@@ -3362,7 +3375,7 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  8001f26:	2b2c      	cmp	r3, #44	; 0x2c
  8001f28:	dc22      	bgt.n	8001f70 <DrawSonar+0x580>
 			{
-				text_x -= TEXT_GAP_7_10 * 3.1;        // Center horizontally
+				text_x -= TEXT_GAP_7_10 * 3.1;
  8001f2a:	8b7b      	ldrh	r3, [r7, #26]
  8001f2c:	4618      	mov	r0, r3
  8001f2e:	f7fe fa69 	bl	8000404 <__aeabi_i2d>
@@ -3376,7 +3389,7 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  8001f44:	f7fe fda0 	bl	8000a88 <__aeabi_d2uiz>
  8001f48:	4603      	mov	r3, r0
  8001f4a:	837b      	strh	r3, [r7, #26]
-				text_y -= TEXT_HEIGHT_7_10 / 1.3;         // Move up to ensure it is outside the circle
+				text_y -= TEXT_HEIGHT_7_10 / 1.3;
  8001f4c:	8b3b      	ldrh	r3, [r7, #24]
  8001f4e:	4618      	mov	r0, r3
  8001f50:	f7fe fa58 	bl	8000404 <__aeabi_i2d>
@@ -3397,11 +3410,11 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  8001f72:	2b59      	cmp	r3, #89	; 0x59
  8001f74:	dc14      	bgt.n	8001fa0 <DrawSonar+0x5b0>
 			{
-				text_x -= TEXT_GAP_7_10 * 2;        // Center horizontally
+				text_x -= TEXT_GAP_7_10 * 2;
  8001f76:	8b7b      	ldrh	r3, [r7, #26]
  8001f78:	3b0e      	subs	r3, #14
  8001f7a:	837b      	strh	r3, [r7, #26]
-				text_y -= TEXT_HEIGHT_7_10 * 1.5;   // Move up to ensure it is outside the circle
+				text_y -= TEXT_HEIGHT_7_10 * 1.5;
  8001f7c:	8b3b      	ldrh	r3, [r7, #24]
  8001f7e:	4618      	mov	r0, r3
  8001f80:	f7fe fa40 	bl	8000404 <__aeabi_i2d>
@@ -3422,11 +3435,11 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  8001fa2:	2b5a      	cmp	r3, #90	; 0x5a
  8001fa4:	d106      	bne.n	8001fb4 <DrawSonar+0x5c4>
 			{
-				text_x -= TEXT_GAP_7_10 / 2;        // Center horizontally
+				text_x -= TEXT_GAP_7_10 / 2;
  8001fa6:	8b7b      	ldrh	r3, [r7, #26]
  8001fa8:	3b03      	subs	r3, #3
  8001faa:	837b      	strh	r3, [r7, #26]
-				text_y -= TEXT_HEIGHT_7_10 * 2;     // Move up
+				text_y -= TEXT_HEIGHT_7_10 * 2;
  8001fac:	8b3b      	ldrh	r3, [r7, #24]
  8001fae:	3b14      	subs	r3, #20
  8001fb0:	833b      	strh	r3, [r7, #24]
@@ -3437,11 +3450,11 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  8001fb6:	2b86      	cmp	r3, #134	; 0x86
  8001fb8:	dc06      	bgt.n	8001fc8 <DrawSonar+0x5d8>
 			{
-				text_x -= TEXT_GAP_7_10 / 2;        // Center horizontally
+				text_x -= TEXT_GAP_7_10 / 2;
  8001fba:	8b7b      	ldrh	r3, [r7, #26]
  8001fbc:	3b03      	subs	r3, #3
  8001fbe:	837b      	strh	r3, [r7, #26]
-				text_y -= TEXT_HEIGHT_7_10 * 2;     // Move up
+				text_y -= TEXT_HEIGHT_7_10 * 2;
  8001fc0:	8b3b      	ldrh	r3, [r7, #24]
  8001fc2:	3b14      	subs	r3, #20
  8001fc4:	833b      	strh	r3, [r7, #24]
@@ -3449,11 +3462,11 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 			}
 			else
 			{
-				text_x += TEXT_GAP_7_10;        // Center horizontally
+				text_x += TEXT_GAP_7_10;
  8001fc8:	8b7b      	ldrh	r3, [r7, #26]
  8001fca:	3307      	adds	r3, #7
  8001fcc:	837b      	strh	r3, [r7, #26]
-				text_y -= TEXT_HEIGHT_7_10;     // Move up to ensure it is outside the circle
+				text_y -= TEXT_HEIGHT_7_10;
  8001fce:	8b3b      	ldrh	r3, [r7, #24]
  8001fd0:	3b0a      	subs	r3, #10
  8001fd2:	833b      	strh	r3, [r7, #24]
@@ -3526,9 +3539,10 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  800206c:	00000000 	.word	0x00000000
 
 08002070 <HideSonar>:
-
-
-
+ * @param  radius: The radius of the semi-circle
+ * @param  color: The color to use for erasing (typically the background color)
+ * @retval None
+ */
 void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 {
  8002070:	e92d 43b0 	stmdb	sp!, {r4, r5, r7, r8, r9, lr}
@@ -3558,7 +3572,6 @@ void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  80020a0:	4623      	mov	r3, r4
  80020a2:	f004 fccf 	bl	8006a44 <ILI9341_DrawLine>
 
-	//removeOldEntriesForced(array, &size);
 	removeOldEntriesForced(&array, &size);
  80020a6:	492b      	ldr	r1, [pc, #172]	; (8002154 <HideSonar+0xe4>)
  80020a8:	482b      	ldr	r0, [pc, #172]	; (8002158 <HideSonar+0xe8>)
@@ -4195,7 +4208,10 @@ void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  80026c4:	00000000 	.word	0x00000000
 
 080026c8 <DrawScanning>:
-
+ * @param  position: The current angle position of the scanning line in degrees.
+ * @param  previousPosition: The previous angle position of the scanning line in degrees.
+ * @retval None
+ */
 void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, uint16_t position, uint16_t previousPosition)
 {
  80026c8:	e92d 43b0 	stmdb	sp!, {r4, r5, r7, r8, r9, lr}
@@ -4458,7 +4474,6 @@ void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t col
  8002924:	801a      	strh	r2, [r3, #0]
 	}
 
-	/**/
 	for (int i = position - 2; i <= position + 2; i++)
  8002926:	8f3b      	ldrh	r3, [r7, #56]	; 0x38
  8002928:	3b02      	subs	r3, #2
@@ -5027,8 +5042,10 @@ void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t col
  8002e8c:	00000000 	.word	0x00000000
 
 08002e90 <DrawTarget>:
-
-
+ * @param  distanceHCSR04: The distance measured by the HCSR04 sensor.
+ * @param  positionServo: The angle position of the servo motor.
+ * @retval None
+ */
 void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_t positionServo)
 {
  8002e90:	e92d 43b0 	stmdb	sp!, {r4, r5, r7, r8, r9, lr}
@@ -5228,9 +5245,10 @@ void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_
  8003048:	20000a48 	.word	0x20000a48
 
 0800304c <PrintStateChoixMenu>:
-
-
-
+/**
+ * @brief  Displays the current state as "Choix menu" on the screen.
+ * @retval None
+ */
 void PrintStateChoixMenu(void)
 {
  800304c:	b590      	push	{r4, r7, lr}
@@ -5303,8 +5321,10 @@ void PrintStateChoixMenu(void)
  80030e0:	08012398 	.word	0x08012398
 
 080030e4 <PrintStateScan>:
-
-
+/**
+ * @brief  Displays the current state as "Scanne environnement" on the screen.
+ * @retval None
+ */
 void PrintStateScan(void)
 {
  80030e4:	b590      	push	{r4, r7, lr}
@@ -5377,8 +5397,10 @@ void PrintStateScan(void)
  8003178:	080123a4 	.word	0x080123a4
 
 0800317c <PrintStatePause>:
-
-
+/**
+ * @brief  Displays the current state as "Pause" on the screen.
+ * @retval None
+ */
 void PrintStatePause(void)
 {
  800317c:	b590      	push	{r4, r7, lr}
@@ -5451,8 +5473,10 @@ void PrintStatePause(void)
  8003210:	080123bc 	.word	0x080123bc
 
 08003214 <PrintDistance>:
-
-
+ * @brief  Displays the measured distance on the screen.
+ * @param  distance: The distance to be displayed.
+ * @retval None
+ */
 void PrintDistance(uint16_t distance)
 {
  8003214:	b580      	push	{r7, lr}
@@ -5562,8 +5586,8 @@ void process_ms(void)
  80032dc:	20000a58 	.word	0x20000a58
 
 080032e0 <main>:
-extern static uint16_t y4 = 30 + TEXT_HEIGHT_7_10 * 4;
-*/
+
+
 
 
 int main(void)
@@ -5635,10 +5659,10 @@ int main(void)
  8003340:	080032bd 	.word	0x080032bd
 
 08003344 <state_machine>:
+
 bool_e test_scan;
 
 
-/**/
 static void state_machine(void)
 {
  8003344:	b580      	push	{r7, lr}

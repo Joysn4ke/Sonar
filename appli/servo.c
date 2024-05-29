@@ -17,6 +17,15 @@ static uint16_t position = 18;
 
 static uint16_t current_position;
 
+
+
+/**
+ * @brief  Initializes the servo motor.
+ *         Configures and starts Timer 1 with a period of 10 ms.
+ *         Enables PWM signal on Timer 1 Channel 1 (PA8 pin).
+ *         Sets the duty cycle for a servo position of 0 degrees.
+ * @retval None
+ */
 void SERVO_init(void){
     //initialisation et lancement du timer1 �  une période de 10 ms
     TIMER_run_us(TIMER1_ID, PERIOD_TIMER*1000, FALSE); //10000us = 10ms
@@ -30,6 +39,14 @@ void SERVO_init(void){
 }
 
 
+
+/**
+ * @brief  Sets the position of the servo motor.
+ *         Sets the current position variable.
+ *         Sets the duty cycle of the PWM signal to control the servo position.
+ * @param  position: The desired position of the servo motor in degrees.
+ * @retval None
+ */
 void SERVO_set_position(uint16_t position) {
     current_position = position;
     uint16_t servopos;
@@ -40,6 +57,12 @@ void SERVO_set_position(uint16_t position) {
     //HAL_Delay(25);
 }
 
+
+/**
+ * @brief  Rotates the servo motor in a continuous manner.
+ *         Rotates the servo motor back and forth within a defined range of positions.
+ * @retval None
+ */
 void SERVO_rotation(void) {
     static bool_e rotation = TRUE; // Initialisation � true par d�faut
 
@@ -59,6 +82,11 @@ void SERVO_rotation(void) {
     //HAL_Delay(10); //anti-rebond "de fortune" en cadencant la lecture du bouton
 }
 
+
+/**
+ * @brief  Gets the current position of the servo motor.
+ * @retval The current position of the servo motor in degrees.
+ */
 uint16_t getPosition(void){
 	return position;
 }
