@@ -53,8 +53,6 @@ void SERVO_set_position(uint16_t position) {
     TIMER_run_us(TIMER1_ID,10000,FALSE);
 
     TIMER_set_duty(TIMER1_ID, TIM_CHANNEL_1, position+100);
-
-    //HAL_Delay(25);
 }
 
 
@@ -78,8 +76,6 @@ void SERVO_rotation(void) {
     }
 
     SERVO_set_position(position);
-
-    //HAL_Delay(10); //anti-rebond "de fortune" en cadencant la lecture du bouton
 }
 
 

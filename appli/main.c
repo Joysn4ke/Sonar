@@ -91,7 +91,9 @@ typedef enum
 static state_e state = INIT;
 static state_e previous_state = INIT;
 
-bool_e test_scan;
+//bool_e test_scan;
+int test_scan;
+bool_e lightMode = FALSE;
 
 
 static void state_machine(void)
@@ -117,23 +119,38 @@ static void state_machine(void)
             if(entrance)
             {
 				DrawMenu();
-				PrintStateChoixMenu();
+				PrintStateChoixMenu(lightMode);
 			}
 
             test_scan = scanning_enable();
 
-            if (test_scan)
+            if (test_scan == 1)
             {
                 state = SCANNING_ENVIRONNEMENT;
-                HideMenu();
-                DrawSonar(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_GREEN);
+                HideMenu(lightMode);
+                DrawSonar(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_GREEN, lightMode);
+            } else if (test_scan == 2) {
+            	state = MENU_CHOICE;
+            	lightMode = !lightMode;
+
+            	uint16_t backgroundColor;
+				if(lightMode) {
+					backgroundColor = ILI9341_COLOR_WHITE;
+				} else {
+					backgroundColor = ILI9341_COLOR_BLACK;
+				}
+
+				ILI9341_Fill(backgroundColor);
+				DrawMenu();
+				PrintStateChoixMenu(lightMode);
+				DrawCloseButton();
             }
             break;
 
         case SCANNING_ENVIRONNEMENT:
             if(entrance)
             {
-            	PrintStateScan();
+            	PrintStateScan(lightMode);
             }
 
             HCSR04_state_machine();
@@ -147,7 +164,7 @@ static void state_machine(void)
 
 				positionParam = getPosition();
 
-				DrawScanning(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_GREEN, positionParam, previousPosition);
+				DrawScanning(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_GREEN, positionParam, previousPosition, lightMode);
 
 				previousPosition = positionParam;
 
@@ -155,13 +172,7 @@ static void state_machine(void)
 				//###########################################################
 				//############## !!!!!!!! A COMMENTER !!!!!!!! ##############
 				//###########################################################
-				ILI9341_Puts(xOrigin, yOrigin4, "Position moteur : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
-
-				sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
-				ILI9341_Puts((uint16_t)(xOrigin + strLenghtPosMot), yOrigin4, buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);
-
-				sprintf(buffer, "%d", positionParam);
-				ILI9341_Puts((uint16_t)(xOrigin + strLenghtPosMot), yOrigin4, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
+				PrintPositionMotor(positionParam, lightMode);
 				//###########################################################
 				//############## !!!!!!!! A COMMENTER !!!!!!!! ##############
 				//###########################################################
@@ -197,7 +208,7 @@ static void state_machine(void)
         case PAUSE:
 			if(entrance) {
 				t = 3000;
-				PrintStatePause();
+				PrintStatePause(lightMode);
 			}
 
 
@@ -209,8 +220,8 @@ static void state_machine(void)
         case SCREEN_DISPLAY:
             if(entrance)
             {
-            	PrintDistance(distance);
-            	DrawTarget(SCREEN_CENTER_X,(uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(distance * 50 / 2000), positionParam);
+            	PrintDistance(distance, lightMode);
+            	DrawTarget(SCREEN_CENTER_X,(uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(distance * 50 / 2000), positionParam, lightMode);
             }
             state = SCANNING_ENVIRONNEMENT;
             break;
@@ -233,9 +244,18 @@ void isClicked(void) {
 
 		if(isClickedOnCircle(static_x, static_y, closeButton.centerX, closeButton.centerY, closeButton.radius)) {
 			state = MENU_CHOICE;
-			HideSonar(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), ILI9341_COLOR_BLACK);
-			ILI9341_Puts(xOrigin, yOrigin4, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);		//Hide distance display
-			ILI9341_Puts(xOrigin, yOrigin2, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);		//Hide position motor display
+
+			uint16_t backgroundColor;
+			if(lightMode) {
+				backgroundColor = ILI9341_COLOR_WHITE;
+			} else {
+				backgroundColor = ILI9341_COLOR_BLACK;
+			}
+
+			HideSonar(SCREEN_CENTER_X, (uint16_t)(SCREEN_LENGTH - 25), (uint16_t)(SCREEN_CENTER_X - 50), backgroundColor, lightMode);
+
+			ILI9341_Puts(xOrigin, yOrigin4, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, backgroundColor, backgroundColor);		//Hide distance display
+			ILI9341_Puts(xOrigin, yOrigin2, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", &Font_7x10, backgroundColor, backgroundColor);		//Hide position motor display
 		}
 	}
 }

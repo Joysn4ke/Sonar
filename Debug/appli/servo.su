@@ -1,4 +1,4 @@
-servo.c:20:6:SERVO_init	16	static
-servo.c:33:6:SERVO_set_position	16	static
-servo.c:43:6:SERVO_rotation	8	static
-servo.c:62:10:getPosition	4	static
+servo.c:29:6:SERVO_init	16	static
+servo.c:50:6:SERVO_set_position	16	static
+servo.c:64:6:SERVO_rotation	8	static
+servo.c:86:10:getPosition	4	static

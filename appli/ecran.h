@@ -88,8 +88,8 @@ static Circle closeButton = {30, 30, 20};
 
 
 void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, int16_t x, int16_t y);
-void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime);
-void removeOldEntriesForced(TabTarget **array, size_t *size);
+void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime, uint16_t color);
+void removeOldEntriesForced(TabTarget **array, size_t *size, uint16_t color);
 
 void Screen_init(void);
 
@@ -99,20 +99,21 @@ void DrawCloseButton(void);
 void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color);
 
 void DrawMenu(void);
-void HideMenu(void);
+void HideMenu(bool_e lightModeLocal);
 
-void PrintStateChoixMenu(void);
-void PrintStateScan(void);
-void PrintStatePause(void);
+void PrintStateChoixMenu(bool_e lightModeLocal);
+void PrintStateScan(bool_e lightModeLocal);
+void PrintStatePause(bool_e lightModeLocal);
 
-void PrintDistance(uint16_t distance);
+void PrintDistance(uint16_t distance, bool_e lightModeLocal);
+void PrintPositionMotor(uint16_t positionParam, bool_e lightModeLocal);
 
-void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color);
-void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color);
+void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, bool_e lightModeLocal);
+void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, bool_e lightModeLocal);
 
-void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, uint16_t position, uint16_t previousPosition);
+void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, uint16_t position, uint16_t previousPosition, bool_e lightModeLocal);
 
-void DrawTarget(int16_t centerX, int16_t centerY, int16_t radius, int16_t position);
+void DrawTarget(int16_t centerX, int16_t centerY, int16_t radius, int16_t position, bool_e lightModeLocal);
 
 bool_e scanning_enable(void);
 

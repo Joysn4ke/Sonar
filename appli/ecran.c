@@ -67,7 +67,7 @@ bool_e isClickedOnCircle(uint16_t click_x, uint16_t click_y, uint16_t circle_x, 
  * @brief  Enables scanning and checks if touch input is within defined rectangles
  * @retval TRUE if touch input is within defined rectangles, FALSE otherwise
  */
-bool_e scanning_enable(void)
+int scanning_enable(void)
 {
 	static uint16_t static_x,static_y;
 	uint16_t x, y;
@@ -90,20 +90,20 @@ bool_e scanning_enable(void)
 
 		if(isClickedOnRectangle(static_x, static_y, x1, y1, x2, y2))
 		{
-			return TRUE;
+			return 1;
 		}
-		else if(isClickedOnRectangle(static_x, static_y, x1, y1, x2, y2))
+		else if(isClickedOnRectangle(static_x, static_y, x1, y1 + delta2, x2, y2 + delta2))
 		{
-			return TRUE;
+			return 2;
 		}
 		else
 		{
-			return FALSE;
+			return 0;
 		}
 	}
 	else
 	{
-		return FALSE;
+		return 0;
 	}
 }
 
@@ -141,14 +141,14 @@ void addEntry(TabTarget **array, size_t *size, size_t *capacity, uint32_t time, 
  * @param  currentTime: Current timestamp
  * @retval None
  */
-void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
+void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime, uint16_t color)
 {
     size_t i = 0;
     while (i < *size)
     {
         if (currentTime - array[i].time > 2500)
         {
-        	ILI9341_DrawFilledCircle(array[i].x, array[i].y, 3, ILI9341_COLOR_BLACK);
+        	ILI9341_DrawFilledCircle(array[i].x, array[i].y, 3, color);
             memmove(&array[i], &array[i + 1], (*size - i - 1) * sizeof(TabTarget));
             (*size)--;
         }
@@ -167,12 +167,12 @@ void removeOldEntries(TabTarget *array, size_t *size, uint32_t currentTime)
  * @param  size: Pointer to the size of the array
  * @retval None
  */
-void removeOldEntriesForced(TabTarget **array, size_t *size)
+void removeOldEntriesForced(TabTarget **array, size_t *size, uint16_t color)
 {
 	size_t i = 0;
 	while (i < *size)
 	{
-		ILI9341_DrawFilledCircle((*array)[i].x, (*array)[i].y, 3, ILI9341_COLOR_BLACK);
+		ILI9341_DrawFilledCircle((*array)[i].x, (*array)[i].y, 3, color);
 		i++;
 	}
 	free(*array);
@@ -237,7 +237,7 @@ void DrawCloseButton(void)
  * @brief  Draws the menu on the screen
  * @retval None
  */
-void DrawMenu(void)
+void DrawMenu()
 {
 	uint16_t x1 = SCREEN_WIDTH/4;
 	uint16_t y1 = SCREEN_LENGTH/4;
@@ -269,8 +269,15 @@ void DrawMenu(void)
  * @brief  Hides the menu on the screen by filling the menu areas with black color
  * @retval None
  */
-void HideMenu(void)
+void HideMenu(bool_e lightModeLocal)
 {
+	uint16_t backgroundColor;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+	}
+
 	uint16_t x1 = SCREEN_WIDTH/4;
 	uint16_t y1 = SCREEN_LENGTH/4;
 	uint16_t x2 = SCREEN_WIDTH - SCREEN_WIDTH/4;
@@ -279,11 +286,11 @@ void HideMenu(void)
 	uint16_t delta1 = 2;
 	uint16_t delta2 = y2 - y1 + 15;
 
-	ILI9341_INT_Fill(x1, y1, x2, y2, ILI9341_COLOR_BLACK);
-	ILI9341_INT_Fill(x1 + delta1, y1 + delta1, x2 - delta1, y2 - delta1, ILI9341_COLOR_BLACK);
+	ILI9341_INT_Fill(x1, y1, x2, y2, backgroundColor);
+	ILI9341_INT_Fill(x1 + delta1, y1 + delta1, x2 - delta1, y2 - delta1, backgroundColor);
 
-	ILI9341_INT_Fill(x1, y1 + delta2, x2, y2 + delta2, ILI9341_COLOR_BLACK);
-	ILI9341_INT_Fill(x1 + delta1, y1 + delta1 + delta2, x2 - delta1, y2 - delta1 + delta2, ILI9341_COLOR_BLACK);
+	ILI9341_INT_Fill(x1, y1 + delta2, x2, y2 + delta2, backgroundColor);
+	ILI9341_INT_Fill(x1 + delta1, y1 + delta1 + delta2, x2 - delta1, y2 - delta1 + delta2, backgroundColor);
 }
 
 
@@ -344,8 +351,16 @@ void DrawHalfCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color)
  * @param  color: The color of the semi-circle, lines, and text
  * @retval None
  */
-void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
+void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, bool_e lightModeLocal)
 {
+
+	uint16_t backgroundColor;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+	}
+
     // Dessiner le demi-cercle
     //for (int i = 0; i <= 180; i++) {
 	for (int i = 15; i <= 165; i++)
@@ -409,7 +424,7 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
 			pointsAngleText[i / 15][0] = text_x;
 			pointsAngleText[i / 15][1] = text_y;
 
-			ILI9341_Puts(text_x, text_y, angle, &Font_7x10, color, ILI9341_COLOR_BLACK);
+			ILI9341_Puts(text_x, text_y, angle, &Font_7x10, color, backgroundColor);
         }
     }
 }
@@ -424,42 +439,50 @@ void DrawSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  * @param  color: The color to use for erasing (typically the background color)
  * @retval None
  */
-void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
+void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, bool_e lightModeLocal)
 {
-	ILI9341_DrawLine(centerX, centerY, eraseX, eraseY, color);
+	uint16_t backgroundColor;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+	}
 
-	removeOldEntriesForced(&array, &size);
 
-	DrawHalfCircle(centerX, centerY, radius / 1.25, color);
-	DrawHalfCircle(centerX, centerY, radius / 1.75, color);
-	DrawHalfCircle(centerX, centerY, radius / 2.75, color);
+	ILI9341_DrawLine(centerX, centerY, eraseX, eraseY, backgroundColor);
+
+	removeOldEntriesForced(&array, &size, backgroundColor);
+
+	DrawHalfCircle(centerX, centerY, radius / 1.25, backgroundColor);
+	DrawHalfCircle(centerX, centerY, radius / 1.75, backgroundColor);
+	DrawHalfCircle(centerX, centerY, radius / 2.75, backgroundColor);
 
 	for (int i = 15; i <= 165; i++)
 	{
 		int x = centerX - round(radius / 1.75 * cos(M_PI * i / 180));
 		int y = centerY - round(radius / 1.75 * sin(M_PI * i / 180));
-		ILI9341_DrawPixel(x, y, color);
+		ILI9341_DrawPixel(x, y, backgroundColor);
 
 		x = centerX - round(radius / 2.75 * cos(M_PI * i / 180));
 		y = centerY - round(radius / 2.75 * sin(M_PI * i / 180));
-		ILI9341_DrawPixel(x, y, color);
+		ILI9341_DrawPixel(x, y, backgroundColor);
 
 		x = centerX - round(radius / 1.25 * cos(M_PI * i / 180));
 		y = centerY - round(radius / 1.25 * sin(M_PI * i / 180));
-		ILI9341_DrawPixel(x, y, color);
+		ILI9341_DrawPixel(x, y, backgroundColor);
 
 		x = centerX - round(radius * cos(M_PI * i / 180));
 		y = centerY - round(radius * sin(M_PI * i / 180));
-		ILI9341_DrawPixel(x, y, color);
+		ILI9341_DrawPixel(x, y, backgroundColor);
 
 		if(i % 15 == 0)
 		{
-        	ILI9341_DrawLine(centerX, centerY, x, y, color);
+        	ILI9341_DrawLine(centerX, centerY, x, y, backgroundColor);
         	char angle[10];
 			sprintf(angle, "%d'", i);
 
 			//ILI9341_Puts(pointsAngle[i / 15][0], pointsAngle[i / 15][1], angle, &Font_7x10, color, color);
-			ILI9341_Puts(pointsAngleText[i / 15][0], pointsAngleText[i / 15][1], angle, &Font_7x10, color, color);
+			ILI9341_Puts(pointsAngleText[i / 15][0], pointsAngleText[i / 15][1], angle, &Font_7x10, backgroundColor, backgroundColor);
         }
     }
 }
@@ -477,14 +500,22 @@ void HideSonar(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color)
  * @param  previousPosition: The previous angle position of the scanning line in degrees.
  * @retval None
  */
-void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, uint16_t position, uint16_t previousPosition)
+void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t color, uint16_t position, uint16_t previousPosition, bool_e lightModeLocal)
 {
+	uint16_t backgroundColor;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+	}
+
+
 	int16_t tempX;
 	int16_t tempY;
 
 	tempX = centerX - round(radius * cos(M_PI * previousPosition / 180));
 	tempY = centerY - round(radius * sin(M_PI * previousPosition / 180));
-	ILI9341_DrawLine(centerX, centerY, tempX, tempY, ILI9341_COLOR_BLACK);
+	ILI9341_DrawLine(centerX, centerY, tempX, tempY, backgroundColor);
 
 	if(position >= 15 && position <= 165)
 	{
@@ -536,8 +567,15 @@ void DrawScanning(int16_t centerX, int16_t centerY, int16_t radius, uint16_t col
  * @param  positionServo: The angle position of the servo motor.
  * @retval None
  */
-void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_t positionServo)
+void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_t positionServo, bool_e lightModeLocal)
 {
+	uint16_t backgroundColor;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+	}
+
 	if (array == NULL)
 	{
 		array = malloc(capacity * sizeof(TabTarget));
@@ -559,7 +597,7 @@ void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_
 		ILI9341_DrawFilledCircle(tempX, tempY, 3, ILI9341_COLOR_RED);
 
 		// Supprimer les anciennes entrées
-		removeOldEntries(array, &size, currentTime);
+		removeOldEntries(array, &size, currentTime, backgroundColor);
 	}
 }
 
@@ -570,11 +608,22 @@ void DrawTarget(int16_t centerX, int16_t centerY, int16_t distanceHCSR04, int16_
  * @brief  Displays the current state as "Choix menu" on the screen.
  * @retval None
  */
-void PrintStateChoixMenu(void)
+void PrintStateChoixMenu(bool_e lightModeLocal)
 {
-	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
-	ILI9341_DrawFilledRectangle((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, (uint16_t)(xOrigin + strLenghtState + strLenghtScanEnv), yOrigin, ILI9341_COLOR_BLACK);
-	ILI9341_Puts((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, "Choix menu", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_BLACK);
+	uint16_t backgroundColor;
+	uint16_t color;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+		color = ILI9341_COLOR_BLACK;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+		color = ILI9341_COLOR_WHITE;
+	}
+
+
+	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, color, backgroundColor);
+	ILI9341_DrawFilledRectangle((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, (uint16_t)(xOrigin + strLenghtState + strLenghtScanEnv), yOrigin, backgroundColor);
+	ILI9341_Puts((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, "Choix menu", &Font_7x10, ILI9341_COLOR_BLUE, backgroundColor);
 }
 
 
@@ -583,11 +632,23 @@ void PrintStateChoixMenu(void)
  * @brief  Displays the current state as "Scanne environnement" on the screen.
  * @retval None
  */
-void PrintStateScan(void)
+void PrintStateScan(bool_e lightModeLocal)
 {
-	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
-	ILI9341_DrawFilledRectangle((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, (uint16_t)(xOrigin + strLenghtState + strLenghtScanEnv), yOrigin, ILI9341_COLOR_BLACK);
-	ILI9341_Puts((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, "Scanne environnement", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_BLACK);
+
+	uint16_t backgroundColor;
+	uint16_t color;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+		color = ILI9341_COLOR_BLACK;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+		color = ILI9341_COLOR_WHITE;
+	}
+
+
+	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, color, backgroundColor);
+	ILI9341_DrawFilledRectangle((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, (uint16_t)(xOrigin + strLenghtState + strLenghtScanEnv), yOrigin, backgroundColor);
+	ILI9341_Puts((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, "Scanne environnement", &Font_7x10, ILI9341_COLOR_BLUE, backgroundColor);
 }
 
 
@@ -596,11 +657,23 @@ void PrintStateScan(void)
  * @brief  Displays the current state as "Pause" on the screen.
  * @retval None
  */
-void PrintStatePause(void)
+void PrintStatePause(bool_e lightModeLocal)
 {
-	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
-	ILI9341_DrawFilledRectangle((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, (uint16_t)(xOrigin + strLenghtState + strLenghtScanEnv), yOrigin, ILI9341_COLOR_BLACK);
-	ILI9341_Puts((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, "Pause", &Font_7x10, ILI9341_COLOR_BLUE, ILI9341_COLOR_BLACK);
+
+	uint16_t backgroundColor;
+	uint16_t color;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+		color = ILI9341_COLOR_BLACK;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+		color = ILI9341_COLOR_WHITE;
+	}
+
+
+	ILI9341_Puts(xOrigin, closeButton.centerY, "Current state : ", &Font_7x10, color, backgroundColor);
+	ILI9341_DrawFilledRectangle((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, (uint16_t)(xOrigin + strLenghtState + strLenghtScanEnv), yOrigin, backgroundColor);
+	ILI9341_Puts((uint16_t)(xOrigin + strLenghtState), closeButton.centerY, "Pause", &Font_7x10, ILI9341_COLOR_BLUE, backgroundColor);
 }
 
 
@@ -610,17 +683,53 @@ void PrintStatePause(void)
  * @param  distance: The distance to be displayed.
  * @retval None
  */
-void PrintDistance(uint16_t distance)
+void PrintDistance(uint16_t distance, bool_e lightModeLocal)
 {
+
+	uint16_t backgroundColor;
+	uint16_t color;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+		color = ILI9341_COLOR_BLACK;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+		color = ILI9341_COLOR_WHITE;
+	}
+
+
 	char buffer[50];
 
-	ILI9341_Puts(xOrigin, yOrigin2, "Distance : ", &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
+	ILI9341_Puts(xOrigin, yOrigin2, "Distance : ", &Font_7x10, color, backgroundColor);
 
 	sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
-	ILI9341_Puts((uint16_t)(xOrigin + strLenghtDistance), yOrigin2, buffer, &Font_7x10, ILI9341_COLOR_BLACK, ILI9341_COLOR_BLACK);
+	ILI9341_Puts((uint16_t)(xOrigin + strLenghtDistance), yOrigin2, buffer, &Font_7x10, backgroundColor, backgroundColor);
 
 	sprintf(buffer, "%d", distance);
-	ILI9341_Puts((uint16_t)(xOrigin + strLenghtDistance), yOrigin2, buffer, &Font_7x10, ILI9341_COLOR_WHITE, ILI9341_COLOR_BLACK);
+	ILI9341_Puts((uint16_t)(xOrigin + strLenghtDistance), yOrigin2, buffer, &Font_7x10, color, backgroundColor);
+}
+
+
+void PrintPositionMotor(uint16_t positionParam, bool_e lightModeLocal)
+{
+	uint16_t backgroundColor;
+	uint16_t color;
+	if(lightModeLocal) {
+		backgroundColor = ILI9341_COLOR_WHITE;
+		color = ILI9341_COLOR_BLACK;
+	} else {
+		backgroundColor = ILI9341_COLOR_BLACK;
+		color = ILI9341_COLOR_WHITE;
+	}
+
+	char buffer[50];
+
+	ILI9341_Puts(xOrigin, yOrigin4, "Position moteur : ", &Font_7x10, color, backgroundColor);
+
+	sprintf(buffer, "AAAAAAAAAAAAAAAAAAAAAAA");
+	ILI9341_Puts((uint16_t)(xOrigin + strLenghtPosMot), yOrigin4, buffer, &Font_7x10, backgroundColor, backgroundColor);
+
+	sprintf(buffer, "%d", positionParam);
+	ILI9341_Puts((uint16_t)(xOrigin + strLenghtPosMot), yOrigin4, buffer, &Font_7x10, color, backgroundColor);
 }
 
 
